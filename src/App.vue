@@ -4,11 +4,24 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
     </div>
-    <HelloWorld msg="Welcome to Your Vue.js App" />
     <div id="background-radial-gradient"></div>
     <router-view />
   </div>
 </template>
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator'
+import HelloWorld from './components/HelloWorld.vue'
+
+@Component({
+  name: 'app',
+  components: {
+    HelloWorld
+  }
+})
+export default class App extends Vue {
+}
+</script>
 
 <style lang="scss">
 #app {
