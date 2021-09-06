@@ -1,56 +1,47 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="primary"
-      dark
-    >
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
-
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-main>
-      <router-view/>
-    </v-main>
-  </v-app>
+  <div>
+    <v-app>
+      <v-main>
+        <router-view />
+        <div id="background-radial-gradient"></div>
+      </v-main>
+    </v-app>
+  </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from 'vue'
 
 export default Vue.extend({
   name: 'App',
 
   data: () => ({
     //
-  }),
-});
+  })
+})
 </script>
+
+<style lang="scss">
+html {
+  min-height: 100%;
+  color: rgb(255, 255, 255);
+  background-color: rgb(33, 36, 41);
+}
+
+#background-radial-gradient {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  width: 200vw;
+  height: 200vh;
+  background: radial-gradient(
+    50% 50% at 50% 50%,
+    #fc077d10 0,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translate(-50vw, -100vh);
+  z-index: -1;
+}
+</style>
