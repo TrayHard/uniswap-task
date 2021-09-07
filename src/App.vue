@@ -3,7 +3,7 @@
     <v-app>
       <v-main>
         <router-view />
-        <div id="background-radial-gradient"></div>
+        <div id="bg"></div>
       </v-main>
     </v-app>
   </div>
@@ -28,7 +28,7 @@ html {
   background-color: rgb(33, 36, 41);
 }
 
-#background-radial-gradient {
+#bg {
   position: fixed;
   top: 0;
   left: 0;
@@ -42,6 +42,5 @@ html {
     rgba(255, 255, 255, 0) 100%
   );
   transform: translate(-50vw, -100vh);
-  z-index: -1;
 }
 </style>
