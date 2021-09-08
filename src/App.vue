@@ -1,31 +1,127 @@
 <template>
   <div>
+    <div id="bg"></div>
     <v-app>
+      <div class="nav">
+        <a href="https://app.uniswap.org/">
+          <img width="24px" src="@/assets/img/logo_white.svg" />
+        </a>
+        <v-btn-toggle x-small v-model="route" rounded dark class="nav__toggler">
+          <v-btn value="Swap">Swap</v-btn>
+          <v-btn value="Pool">Pool</v-btn>
+          <v-btn value="Vote">Vote</v-btn>
+          <v-btn
+            value="Charts↗"
+            href="https://info.uniswap.org/#/"
+            target="_blank"
+            >Charts <sup>↗</sup></v-btn
+          >
+        </v-btn-toggle>
+        <div class="nav__main-controls">
+          <v-btn color="rgba(21, 61, 111, 0.44)" role="connect" class="px-3">Connect to a wallet</v-btn>
+          <v-btn color="rgb(25, 27, 31)" role="more" class="ml-3 px-2" height="36px" x-small>
+            <img src="@/assets/img/ellipsis.svg" />
+          </v-btn>
+        </div>
+      </div>
       <v-main>
         <router-view />
-        <div id="bg"></div>
       </v-main>
     </v-app>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
+import { Component, Vue } from 'vue-property-decorator'
 
-export default Vue.extend({
-  name: 'App',
-
-  data: () => ({
-    //
-  })
-})
+@Component
+export default class App extends Vue {
+  route = 'Swap'
+}
 </script>
 
 <style lang="scss">
-html {
-  min-height: 100%;
-  color: rgb(255, 255, 255);
-  background-color: rgb(33, 36, 41);
+.nav .nav__toggler {
+  button.v-btn,
+  a.v-btn {
+    background: #1e1e1e;
+    border-radius: 13px;
+    border: 0;
+    font-size: 16px;
+    height: 36px;
+
+    &--active {
+      background: rgb(44, 47, 54);
+    }
+  }
+}
+</style>
+
+<style lang="scss" scoped>
+$btn-text-transform: none;
+
+.nav {
+  background: #212429;
+  display: grid;
+  grid-template-columns: 120px 1fr 120px;
+  -webkit-box-pack: justify;
+  justify-content: space-between;
+  -webkit-box-align: center;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  top: 0px;
+  padding: 1rem;
+  position: relative;
+  box-shadow: transparent 0px 0px 0px 1px;
+  transition: background-position 0.1s ease 0s, box-shadow 0.1s ease 0s;
+  background-blend-mode: hard-light;
+  font-family: "Inter var", cursive;
+
+  * {
+    z-index: 10;
+  }
+
+  &__toggler {
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    justify-self: center;
+    background-color: rgb(25, 27, 31);
+    width: fit-content;
+    padding: 4px;
+    border-radius: 16px;
+    display: grid;
+    grid-auto-flow: column;
+    gap: 10px;
+    overflow: auto;
+    -webkit-box-align: center;
+    align-items: center;
+  }
+
+  &__main-controls {
+    display: flex;
+    flex-direction: row;
+    -webkit-box-align: center;
+    align-items: center;
+    justify-self: flex-end;
+
+    & > .v-btn {
+      font-size: 16px;
+      border-radius: 12px;
+
+      &[role='connect'] {
+        color: rgb(80, 144, 234);
+        border: 1px solid rgba(21, 61, 111, 0.44);
+      }
+
+      &[role='more'] {
+        color: #fff;
+        border: 1px solid rgb(25, 27, 31);
+      }
+    }
+  }
+
+
 }
 
 #bg {
@@ -42,5 +138,6 @@ html {
     rgba(255, 255, 255, 0) 100%
   );
   transform: translate(-50vw, -100vh);
+  z-index: 1;
 }
 </style>
