@@ -1,10 +1,4 @@
 @import "reset";
-@import "vars";
-
-* {
-    box-sizing: border-box;
-    font-family: "Inter var", cursive;
-}
 
 html,
 body,
@@ -13,10 +7,4 @@ main {
     color: rgb(255, 255, 255);
     background-color: rgb(33, 36, 41);
     font-size: 16px;
-    font-family: "Inter var", cursive;
-}
-
-@font-face {
-    font-family: "Inter var";
-    src: url('./assets/fonts/Inter-roman.var.woff2') format("woff2");
 }

@@ -1,4 +1,7 @@
-// Any changes to a default variable must be
-// declared above the initial style import
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
+$body-font-family: 'Inter';
 
 $btn-text-transform: none;
+
+// COLORS
+$colorDarkBg: rgb(25, 27, 131);

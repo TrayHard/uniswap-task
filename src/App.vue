@@ -7,10 +7,11 @@
           <img width="24px" src="@/assets/img/logo_white.svg" />
         </a>
         <v-btn-toggle x-small v-model="route" rounded dark class="nav__toggler">
-          <v-btn value="Swap">Swap</v-btn>
-          <v-btn value="Pool">Pool</v-btn>
-          <v-btn value="Vote">Vote</v-btn>
+          <v-btn x-small value="Swap">Swap</v-btn>
+          <v-btn x-small value="Pool">Pool</v-btn>
+          <v-btn x-small value="Vote">Vote</v-btn>
           <v-btn
+            x-small
             value="Charts↗"
             href="https://info.uniswap.org/#/"
             target="_blank"
@@ -18,8 +19,16 @@
           >
         </v-btn-toggle>
         <div class="nav__main-controls">
-          <v-btn color="rgba(21, 61, 111, 0.44)" role="connect" class="px-3">Connect to a wallet</v-btn>
-          <v-btn color="rgb(25, 27, 31)" role="more" class="ml-3 px-2" height="36px" x-small>
+          <v-btn color="rgba(21, 61, 111, 0.44)" role="connect" class="px-3"
+            >Connect to a wallet</v-btn
+          >
+          <v-btn
+            color="colorDarkBg"
+            role="more"
+            class="ml-3 px-2"
+            height="36px"
+            x-small
+          >
             <img src="@/assets/img/ellipsis.svg" />
           </v-btn>
         </div>
@@ -32,33 +41,24 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import { Component, Vue, Watch } from "vue-property-decorator";
 
 @Component
 export default class App extends Vue {
-  route = 'Swap'
+  route = "Swap";
+
+  @Watch("route")
+  onRouteChanged(newRoute: string): void {
+    this.$router.push(newRoute.toLowerCase());
+  }
 }
 </script>
 
 <style lang="scss">
-.nav .nav__toggler {
-  button.v-btn,
-  a.v-btn {
-    background: #1e1e1e;
-    border-radius: 13px;
-    border: 0;
-    font-size: 16px;
-    height: 36px;
-
-    &--active {
-      background: rgb(44, 47, 54);
-    }
-  }
+@font-face {
+  font-family: "Inter var";
+  src: url("/assets/fonts/Inter-roman.var.woff2") format("woff2");
 }
-</style>
-
-<style lang="scss" scoped>
-$btn-text-transform: none;
 
 .nav {
   background: #212429;
@@ -76,17 +76,16 @@ $btn-text-transform: none;
   box-shadow: transparent 0px 0px 0px 1px;
   transition: background-position 0.1s ease 0s, box-shadow 0.1s ease 0s;
   background-blend-mode: hard-light;
-  font-family: "Inter var", cursive;
 
   * {
     z-index: 10;
   }
 
-  &__toggler {
+  & &__toggler {
     -webkit-box-pack: start;
     justify-content: flex-start;
     justify-self: center;
-    background-color: rgb(25, 27, 31);
+    background-color: $colorDarkBg;
     width: fit-content;
     padding: 4px;
     border-radius: 16px;
@@ -96,6 +95,19 @@ $btn-text-transform: none;
     overflow: auto;
     -webkit-box-align: center;
     align-items: center;
+
+    button.v-btn,
+    a.v-btn {
+      background: #1e1e1e;
+      border-radius: 13px;
+      border: 0;
+      font-size: 16px;
+      height: 36px;
+
+      &--active {
+        background: rgb(44, 47, 54);
+      }
+    }
   }
 
   &__main-controls {
@@ -109,19 +121,17 @@ $btn-text-transform: none;
       font-size: 16px;
       border-radius: 12px;
 
-      &[role='connect'] {
+      &[role="connect"] {
         color: rgb(80, 144, 234);
         border: 1px solid rgba(21, 61, 111, 0.44);
       }
 
-      &[role='more'] {
+      &[role="more"] {
         color: #fff;
-        border: 1px solid rgb(25, 27, 31);
+        border: 1px solid $colorDarkBg;
       }
     }
   }
-
-
 }
 
 #bg {
