@@ -9,9 +9,10 @@ export default new Vuetify({
         themes: {
             dark: {
                 colorDarkBg: '#191B1F',
+                colorLightBlue: '#5090ea',
+                colorDarkBlue: '#172a43',
             }
         }
     },
     treeShake: true,
-    customVariables: ['~/styles/_vars.scss'],
 });

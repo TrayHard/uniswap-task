@@ -19,8 +19,9 @@
           >
         </v-btn-toggle>
         <div class="nav__main-controls">
-          <v-btn color="rgba(21, 61, 111, 0.44)" role="connect" class="px-3"
-            >Connect to a wallet</v-btn
+          <v-btn color="#153d6f70" role="connect" class="px-3">
+            Connect to a wallet
+          </v-btn
           >
           <v-btn
             color="colorDarkBg"
@@ -55,11 +56,6 @@ export default class App extends Vue {
 </script>
 
 <style lang="scss">
-@font-face {
-  font-family: "Inter var";
-  src: url("/assets/fonts/Inter-roman.var.woff2") format("woff2");
-}
-
 .nav {
   background: #212429;
   display: grid;
@@ -122,8 +118,8 @@ export default class App extends Vue {
       border-radius: 12px;
 
       &[role="connect"] {
-        color: rgb(80, 144, 234);
-        border: 1px solid rgba(21, 61, 111, 0.44);
+        color: $colorLightBlue;
+        border: 1px solid $colorDarkBlue;
       }
 
       &[role="more"] {
