@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import Swapper from "../views/Swapper.vue";
+import Swap from "@/pages/Swap.vue";
 
 Vue.use(VueRouter);
 
@@ -8,12 +8,12 @@ const routes: Array<RouteConfig> = [
   {
     path: "/swap",
     name: "Swap",
-    component: Swapper,
+    component: Swap,
   },
   {
     path: "/",
     name: "Swap",
-    component: Swapper,
+    component: Swap,
   },
 ];
 
