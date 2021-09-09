@@ -1,7 +1,21 @@
 export enum ECurrencyList {
   ETH = 'ETH',
-  BTC = 'BTC',
-  DOGE = 'DOGE',
-  ADA = 'ADA',
-  ATOM = 'ATOM',
+  WBTC = 'WBTC',
+  USDT = 'USDT',
+  LINK = 'LINK',
+}
+
+export const CURRENCIES: {[key in ECurrencyList]: { logo: string }} = {
+  ETH: {
+    logo: 'ETH.png',
+  },
+  WBTC: {
+    logo: 'WBTC.svg',
+  },
+  USDT: {
+    logo: 'USDT.png',
+  },
+  LINK: {
+    logo: 'LINK.png',
+  },
 }
