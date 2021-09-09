@@ -7,8 +7,14 @@
 
     <v-card-text>
       <div class="swapper__coins">
-        <CoinField />
-        <CoinField />
+        <CoinField
+          v-model="coindata[0].amount"
+          :currency.sync="coindata[0].name"
+        />
+        <CoinField
+          v-model="coindata[1].amount"
+          :currency.sync="coindata[1].name"
+        />
       </div>
     </v-card-text>
 
@@ -25,7 +31,18 @@ import { Component, Vue } from "vue-property-decorator";
 import CoinField from "@/components/CoinField.vue";
 
 @Component({ components: { CoinField } })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  coindata = [
+    {
+      name: 'ETH',
+      amount: null,
+    },
+    {
+      name: undefined,
+      amount: null,
+    },
+  ]
+}
 </script>
 
 <style lang="scss">

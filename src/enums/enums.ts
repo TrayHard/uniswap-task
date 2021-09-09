@@ -5,17 +5,26 @@ export enum ECurrencyList {
   LINK = 'LINK',
 }
 
-export const CURRENCIES: {[key in ECurrencyList]: { logo: string }} = {
+export type TCoin = {
+  logo: string,
+  equivalent: number,
+}
+
+export const CURRENCIES: {[key in ECurrencyList]: TCoin} = {
   ETH: {
     logo: 'ETH.png',
+    equivalent: 3454.51,
   },
   WBTC: {
     logo: 'WBTC.svg',
+    equivalent: 46374.4,
   },
   USDT: {
     logo: 'USDT.png',
+    equivalent: 0.998979,
   },
   LINK: {
     logo: 'LINK.png',
+    equivalent: 28.4501,
   },
 }
