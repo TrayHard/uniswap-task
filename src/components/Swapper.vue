@@ -1,8 +1,18 @@
 <template>
-  <v-card width="480px" rounded="xl" class="swapper" color="colorDarkBg">
-    <v-card-title primary-title class="swapper__header">
+  <v-card
+    width="480px"
+    rounded="xl"
+    class="swapper"
+    color="colorDarkBg"
+  >
+    <v-card-title
+      primary-title
+      class="swapper__header"
+    >
       <span class="swapper__header-title">Swap</span>
-      <v-icon color="#bbb">mdi-cog-outline</v-icon>
+      <v-icon color="#bbb">
+        mdi-cog-outline
+      </v-icon>
     </v-card-title>
 
     <v-card-text>
@@ -19,7 +29,11 @@
     </v-card-text>
 
     <v-card-actions class="swapper__controls">
-      <v-btn block x-large class="swapper__controls-connect">
+      <v-btn
+        block
+        x-large
+        class="swapper__controls-connect"
+      >
         Connect Wallet
       </v-btn>
     </v-card-actions>
@@ -34,14 +48,14 @@ import CoinField from "@/components/CoinField.vue";
 export default class Home extends Vue {
   coindata = [
     {
-      name: 'ETH',
+      name: "ETH",
       amount: null,
     },
     {
       name: undefined,
       amount: null,
     },
-  ]
+  ];
 }
 </script>
 

@@ -8,12 +8,22 @@
           class="coinfield__currency px-2"
           color="colorDarkBg"
         >
-          <img :src="currencyLogo" width="24px" class="mr-3" />
+          <img
+            :src="currencyLogo"
+            width="24px"
+            class="mr-3"
+          >
           {{ currency }}
           <v-icon class="ml-1">mdi-chevron-down</v-icon>
         </v-btn>
-        <v-btn color="#2172e5" rounded v-else class="px-3">
-          Select a token <v-icon class="ml-1">mdi-chevron-down</v-icon>
+        <v-btn
+          v-else
+          color="#2172e5"
+          rounded
+          class="px-3"
+        >
+          Select a token
+          <v-icon class="ml-1">mdi-chevron-down</v-icon>
         </v-btn>
       </div>
       <div class="coinfield__input">
@@ -28,7 +38,7 @@
           minlength="1"
           maxlength="79"
           spellcheck="false"
-        />
+        >
       </div>
     </div>
     <div class="coinfield__under">
