@@ -1,4 +1,4 @@
-export enum ECurrencyList {
+export enum ECoinsList {
   ETH = 'ETH',
   WBTC = 'WBTC',
   USDT = 'USDT',
@@ -10,7 +10,7 @@ export type TCoin = {
   equivalent: number,
 }
 
-export const CURRENCIES: {[key in ECurrencyList]: TCoin} = {
+export const COINS: {[key in ECoinsList]: TCoin} = {
   ETH: {
     logo: 'ETH.png',
     equivalent: 3454.51,

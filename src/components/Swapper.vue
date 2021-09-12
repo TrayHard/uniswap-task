@@ -10,11 +10,11 @@
         <div class="swapper__coins-wrapper">
           <CoinField
             v-model="coindata[0].amount"
-            :currency.sync="coindata[0].name"
+            :coin.sync="coindata[0].name"
           />
           <CoinField
             v-model="coindata[1].amount"
-            :currency.sync="coindata[1].name"
+            :coin.sync="coindata[1].name"
           />
         </div>
         <div class="swapper__coins-button" @click="coindata.reverse()">

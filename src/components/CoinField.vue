@@ -1,20 +1,20 @@
 <template>
   <div class="coinfield">
     <div class="coinfield__main">
-      <div class="coinfield__token-choose">
+      <div class="coinfield__coin-choose">
         <v-btn
-          v-if="currency"
+          v-if="coin"
           rounded
-          class="coinfield__currency px-2"
+          class="coinfield__coin px-2"
           color="colorDarkBg"
-          @click="openTokenChooser"
+          @click="openCoinChooser"
         >
           <img
-            :src="currencyLogo"
+            :src="coinLogo"
             width="24px"
             class="mr-3"
           >
-          {{ currency }}
+          {{ coin }}
           <v-icon class="ml-1">mdi-chevron-down</v-icon>
         </v-btn>
         <v-btn
@@ -22,7 +22,7 @@
           color="#2172e5"
           rounded
           class="px-3"
-          @click="openTokenChooser"
+          @click="openCoinChooser"
         >
           Select a token
           <v-icon class="ml-1">mdi-chevron-down</v-icon>
@@ -51,8 +51,9 @@
 
 <script lang="ts">
 import { Vue, Component, Prop, ModelSync } from "vue-property-decorator";
-import { CURRENCIES, ECurrencyList } from "@/enums/enums";
+import { COINS, ECoinsList } from "@/enums/enums";
 import { swapModule } from "@/store/swap";
+import { getCoinLogo } from '@/utils';
 
 @Component
 export default class CoinField extends Vue {
@@ -60,20 +61,20 @@ export default class CoinField extends Vue {
   amount!: string | null;
 
   @Prop({ type: String, default: null })
-  currency!: ECurrencyList;
+  coin!: ECoinsList;
 
-  get currencyLogo(): unknown {
-    return require(`../assets/img/coins/${CURRENCIES[this.currency].logo}`);
+  get coinLogo(): unknown {
+    return getCoinLogo(COINS[this.coin].logo);
   }
 
   get equivalent(): string {
-    return this.currency && this.amount
-      ? (CURRENCIES[this.currency].equivalent * +this.amount).toString()
+    return this.coin && this.amount
+      ? (COINS[this.coin].equivalent * +this.amount).toString()
       : "";
   }
 
-  openTokenChooser(): void {
-    swapModule.updateState({ isTokenChooserDialog: true });
+  openCoinChooser(): void {
+    swapModule.updateState({ isCoinChooserDialog: true });
   }
 }
 </script>
