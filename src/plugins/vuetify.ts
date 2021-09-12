@@ -12,7 +12,8 @@ export default new Vuetify({
                 colorLightBlue: '#5090ea',
                 colorDarkBlue: '#172a43',
             }
-        }
+        },
+        options: { customProperties: true },
     },
     treeShake: true,
 });
