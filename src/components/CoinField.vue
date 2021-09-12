@@ -7,6 +7,7 @@
           rounded
           class="coinfield__currency px-2"
           color="colorDarkBg"
+          @click="openTokenChooser"
         >
           <img
             :src="currencyLogo"
@@ -21,6 +22,7 @@
           color="#2172e5"
           rounded
           class="px-3"
+          @click="openTokenChooser"
         >
           Select a token
           <v-icon class="ml-1">mdi-chevron-down</v-icon>
@@ -50,6 +52,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, ModelSync } from "vue-property-decorator";
 import { CURRENCIES, ECurrencyList } from "@/enums/enums";
+import { swapModule } from "@/store/swap";
 
 @Component
 export default class CoinField extends Vue {
@@ -67,6 +70,10 @@ export default class CoinField extends Vue {
     return this.currency && this.amount
       ? (CURRENCIES[this.currency].equivalent * +this.amount).toString()
       : "";
+  }
+
+  openTokenChooser(): void {
+    swapModule.updateState({ isTokenChooserDialog: true });
   }
 }
 </script>
