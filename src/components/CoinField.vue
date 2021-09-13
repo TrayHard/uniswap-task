@@ -52,7 +52,7 @@
 <script lang="ts">
 import { Vue, Component, Prop, ModelSync } from "vue-property-decorator";
 import { COINS, ECoinsList } from "@/enums/enums";
-import { swapModule } from "@/store/swap";
+import { tokenChooserStore } from "@/store/tokenChooserStore";
 import { getCoinLogo } from '@/utils';
 
 @Component
@@ -74,7 +74,7 @@ export default class CoinField extends Vue {
   }
 
   openCoinChooser(): void {
-    swapModule.updateState({ isCoinChooserDialog: true });
+    tokenChooserStore.updateState({ isModalOpen: true });
   }
 }
 </script>

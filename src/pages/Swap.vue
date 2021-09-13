@@ -1,16 +1,14 @@
 <template>
   <div class="container">
     <Swapper />
-    <CoinChooser />
   </div>
 </template>
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import Swapper from '@/components/Swapper.vue';
-import CoinChooser from '@/components/CoinChooser.vue';
 
-@Component({ components: { Swapper, CoinChooser } })
+@Component({ components: { Swapper } })
 export default class SwapPage extends Vue {}
 </script>
 

@@ -21,8 +21,7 @@
         <div class="nav__main-controls">
           <v-btn color="#153d6f70" role="connect" class="px-3">
             Connect to a wallet
-          </v-btn
-          >
+          </v-btn>
           <v-btn
             color="colorDarkBg"
             role="more"
@@ -36,6 +35,7 @@
       </div>
       <v-main>
         <router-view />
+        <CoinChooser />
       </v-main>
     </v-app>
   </div>
@@ -43,8 +43,9 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
+import CoinChooser from "@/components/CoinChooser.vue";
 
-@Component
+@Component({ components: { CoinChooser } })
 export default class App extends Vue {
   route = "Swap";
 

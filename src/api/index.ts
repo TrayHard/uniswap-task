@@ -14,8 +14,8 @@ export class Api {
   private axiosInstance: AxiosInstance;
 
   constructor() {
-    if (process.env.API_URL) {
-      this.axiosInstance = axios.create({ baseURL: process.env.API_URL });
+    if (process.env.VUE_APP_API_URL) {
+      this.axiosInstance = axios.create({ baseURL: process.env.VUE_APP_API_URL });
     } else throw new Error(EApiErrors.NO_API_PATH);
   }
 
@@ -47,11 +47,11 @@ export class Api {
         if (SUCCESS_CODES.includes(response.status)) return {
           success: true,
           data: response.data,
-        };
+        }
         else return {
           success: false,
           error: response.statusText,
-        };
+        }
       },
       error => ({
         success: false,
@@ -70,7 +70,11 @@ export class Api {
         params: { listName }
       } });
     } else if (mocks.getTokensList) {
-      return this.doRequest<TApiTokensListResponse>({ mock: mocks.getTokensList?.[listName] });
+      return this.doRequest<TApiTokensListResponse>({ mock: mocks.getTokensList[listName] });
     } else throw new Error(EApiErrors.NO_MOCK);
   }
 }
+
+const api = new Api();
+
+export default api;

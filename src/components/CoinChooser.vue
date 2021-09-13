@@ -46,7 +46,7 @@
 
       <v-virtual-scroll :items="fullCoinsList" height="700" item-height="56">
         <template v-slot:default="{ item: coin }">
-          <v-list-item :key="coin.ticker">
+          <v-list-item :key="coin.ticker" @click="getTokensList('aaveTokenList')">
             <v-list-item-avatar
               width="24px"
               height="24px"
@@ -82,7 +82,7 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import { swapModule } from "@/store/swap";
+import { tokenChooserStore } from "@/store/tokenChooserStore";
 import { COINS, ECoinsList } from "@/enums/enums";
 import { getCoinLogo } from "@/utils";
 
@@ -97,11 +97,15 @@ export default class CoinChooser extends Vue {
   coinName = "";
 
   get isOpen(): boolean {
-    return swapModule.state.isCoinChooserDialog;
+    return tokenChooserStore.state.isModalOpen;
   }
 
   set isOpen(value: boolean) {
-    swapModule.updateState({ isCoinChooserDialog: value });
+    tokenChooserStore.updateState({ isModalOpen: value });
+  }
+
+  getTokensList(name: string) {
+    tokenChooserStore.actions.getTokensList(name)
   }
 
   closeModal(): void {
@@ -196,8 +200,8 @@ export default class CoinChooser extends Vue {
     }
 
     &-tokenbtn {
-      border-radius: 10px;
-      border: 1px solid #40444f;
+      border-radius: 10px !important;
+      border: 1px solid #40444f !important;
       padding: 6px !important;
     }
   }
