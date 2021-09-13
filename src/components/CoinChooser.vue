@@ -69,10 +69,12 @@
       </v-virtual-scroll>
 
       <v-card-actions class="coinchooser__footer">
-        <v-icon small color="primary" class="mr-1">
-          mdi-square-edit-outline
-        </v-icon>
-        Manage Token Lists
+        <div>
+          <v-icon small color="primary" class="mr-1">
+            mdi-square-edit-outline
+          </v-icon>
+          Manage Token Lists
+        </div>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -223,6 +225,11 @@ export default class CoinChooser extends Vue {
     background: #212429;
     color: var(--v-primary-base);
     border-top: 1px solid rgb(44, 47, 54);
+
+    & > div:hover {
+      cursor: pointer;
+      opacity: 0.6;
+    }
   }
 }
 </style>
