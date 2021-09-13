@@ -1,14 +1,10 @@
+import { TCoin } from "@/models/main";
+
 export enum ECoinsList {
   ETH = 'ETH',
   WBTC = 'WBTC',
   USDT = 'USDT',
   LINK = 'LINK',
-}
-
-export type TCoin = {
-  logo: string,
-  equivalent: number,
-  fullname: string,
 }
 
 export const COINS: {[key in ECoinsList]: TCoin} = {

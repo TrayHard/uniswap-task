@@ -1,12 +1,13 @@
-import { EApiErrors, EApiHeaders, IMockItem, TApiResponse } from '@/models/api';
+import { EApiErrors, EApiMethods, IMockItem, TApiResponse, TApiTokensListResponse } from '@/models/api';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import mocks from './mocks';
 
 export enum EApiEndpoints {
-  getCoins = 'getCoins'
+  getTokensList = 'getTokensList',
 }
 
 const isMocked: Record<EApiEndpoints, boolean> = {
-  getCoins: true,
+  getTokensList: true,
 };
 
 export class Api {
@@ -28,51 +29,48 @@ export class Api {
       throw new Error(EApiErrors.INCORRECT_CALL);
     }
     const method = options.method || 'get';
-    const headerContentType = options.headers && options.headers[EApiHeaders.CONTENT_TYPE]
-      ? options.headers[EApiHeaders.CONTENT_TYPE]
-      : 'application/json';
+    const headerContentType = 'application/json';
     const requestParams: AxiosRequestConfig = {
       url: options.url,
       method,
-      /* eslint @typescript-eslint/no-unsafe-assignment: 'off' */
       [['get', 'delete', 'put'].includes(method) ? 'params' : 'data']: options.params,
       headers: {
-        [EApiHeaders.CONTENT_TYPE]: headerContentType,
+        'Content-Type': headerContentType,
         ...options.headers,
       },
     };
 
     const SUCCESS_CODES = [200, 201, 204];
+
     this.axiosInstance.interceptors.response.use(
       response => {
-        if (SUCCESS_CODES.includes(response.status)) return response;
-        else throw new Error(response.statusText);
+        if (SUCCESS_CODES.includes(response.status)) return {
+          success: true,
+          data: response.data,
+        };
+        else return {
+          success: false,
+          error: response.statusText,
+        };
       },
-      error => { throw error; }
-    );
-
-    try {
-      const apiResponse = await this.axiosInstance.request(requestParams);
-      return {
-        success: true,
-        data: apiResponse.data,
-      };
-    } catch (error: any) {
-      return {
+      error => ({
         success: false,
         error: error?.response || error,
-      };
-    }
+      })
+    );
+
+    return this.axiosInstance.request(requestParams);
   }
 
-  [EApiEndpoints.getCoins](): Promise<TApiResponse<TApiCurrUserInfoResponse>> {
-    if (!isMocked.getCoins) {
-      return this.doRequest<TApiCurrUserInfoResponse>({ options: {
+  [EApiEndpoints.getTokensList](listName: string): Promise<TApiResponse<TApiTokensListResponse>> {
+    if (!isMocked.getTokensList) {
+      return this.doRequest<TApiTokensListResponse>({ options: {
         method: EApiMethods.GET,
-        url: 'currentuserinfo',
+        url: 'getTokensList',
+        params: { listName }
       } });
-    } else if (mocks.getCoins) {
-      return this.doRequest<TApiCurrUserInfoResponse>({ mock: mocks.getCoins?.ok });
+    } else if (mocks.getTokensList) {
+      return this.doRequest<TApiTokensListResponse>({ mock: mocks.getTokensList?.[listName] });
     } else throw new Error(EApiErrors.NO_MOCK);
   }
 }

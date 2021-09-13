@@ -1,3 +1,5 @@
+import { TTag, TToken } from "./main";
+
 export type TApiResponse<T> = IApiSuccessResponse<T> | IApiErrorResponse;
 
 export interface IApiSuccessResponse<T> {
@@ -10,16 +12,9 @@ export interface IApiErrorResponse {
 }
 
 export enum EApiErrors {
-  NO_MOCK = 'Попытка использовать несуществующий mockup!',
-  INCORRECT_CALL = 'Некорректный вызов API!',
-  NO_API_PATH = 'Не предоставлен путь к API!',
-}
-
-export enum EApiHeaders {
-  CONTENT_SAVE_MODE = 'Content-SaveMode',
-  CONTENT_NAME = 'Content-Name',
-  CONTENT_TYPE = 'Content-Type',
-  CONTENT_CONFIRMATION = 'Content-Confirmation',
+  NO_MOCK = 'No mockup provided',
+  INCORRECT_CALL = 'Incorrect API call',
+  NO_API_PATH = 'No API URL',
 }
 
 export enum EApiMethods {
@@ -30,8 +25,17 @@ export enum EApiMethods {
   DELETE = 'delete',
 }
 
-// Мокапы
 export interface IMockItem<T> {
   'timeout'?: number,
   'mockData': TApiResponse<T>,
+}
+
+export type TApiTokensListResponse = {
+  name: string,
+  logoURI: string,
+  keywords: string[],
+  tags: Record<string, TTag>,
+  tokens: TToken[],
+  timestamp: string,
+  version: Record<string, number>,
 }
