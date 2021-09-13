@@ -9,6 +9,7 @@
       <v-card-text class="coinchooser__body">
         <v-text-field
           v-model="coinName"
+          class="coinchooser__search"
           outlined
           rounded
           name="coinname"
@@ -22,14 +23,34 @@
             <v-btn
               class="coinchooser__common-tokenbtn mr-2 mt-2"
               v-for="coin in basicCoins"
-              :key="coin.name"
+              :key="coin.ticker"
             >
               <img :src="coin.logo" width="24px" class="mr-2" />
-              {{ coin.name }}
+              {{ coin.ticker }}
             </v-btn>
           </div>
         </div>
       </v-card-text>
+
+      <v-virtual-scroll :items="fullCoinsList" height="700" item-height="56">
+        <template v-slot:default="{ item: coin }">
+          <v-list-item :key="coin.ticker">
+            <v-list-item-avatar width="24px" height="24px" min-width="24px" class="ml-1 mr-4">
+              <img :src="coin.logo">
+            </v-list-item-avatar>
+
+            <v-list-item-content>
+              <v-list-item-title>
+                {{ coin.ticker }}
+              </v-list-item-title>
+              <v-list-item-subtitle>
+                {{ coin.fullname }}
+              </v-list-item-subtitle>
+            </v-list-item-content>
+          </v-list-item>
+
+        </template>
+      </v-virtual-scroll>
 
       <v-card-actions class="coinchooser__footer">
         <v-icon small color="primary" class="mr-1">
@@ -47,6 +68,12 @@ import { swapModule } from "@/store/swap";
 import { COINS, ECoinsList } from "@/enums/enums";
 import { getCoinLogo } from "@/utils";
 
+type TFullCoinListItem = {
+  ticker: string,
+  logo: unknown,
+  fullname: string,
+}
+
 @Component
 export default class CoinChooser extends Vue {
   coinName = "";
@@ -63,12 +90,28 @@ export default class CoinChooser extends Vue {
     this.isOpen = false;
   }
 
-  get basicCoins(): { name: string; logo: unknown }[] {
+  get basicCoins(): { ticker: string; logo: unknown }[] {
     let coins = [];
-    for (const coinName in COINS) {
-      if (Object.prototype.hasOwnProperty.call(COINS, coinName)) {
-        const coin = COINS[coinName as ECoinsList];
-        coins.push({ name: coinName, logo: getCoinLogo(coin.logo) });
+    for (const ticker in COINS) {
+      if (Object.prototype.hasOwnProperty.call(COINS, ticker)) {
+        const coin = COINS[ticker as ECoinsList];
+        coins.push({ ticker, logo: getCoinLogo(coin.logo) });
+      }
+    }
+    return coins;
+  }
+
+  get fullCoinsList(): TFullCoinListItem[] {
+    // TODO! Move coins list to store
+    let coins = [];
+    for (const ticker in COINS) {
+      if (Object.prototype.hasOwnProperty.call(COINS, ticker)) {
+        const coin = COINS[ticker as ECoinsList];
+        coins.push({
+          ticker,
+          logo: getCoinLogo(coin.logo),
+          fullname: coin.fullname,
+        });
       }
     }
     return coins;
@@ -79,6 +122,7 @@ export default class CoinChooser extends Vue {
 <style lang="scss">
 .coinchooser {
   border-radius: 20px !important;
+  border: 1px solid #212429;
 
   &__title {
     display: flex;
@@ -86,10 +130,30 @@ export default class CoinChooser extends Vue {
     font-size: 16px !important;
   }
 
+  &__search {
+    font-size: 18px !important;
+  }
+
   &__common {
     &-content {
       display: flex;
       flex-wrap: wrap;
+    }
+  }
+
+  .v-virtual-scroll {
+    border-top: 1px solid #2c2f36;
+
+    .v-list-item {
+      &:hover {
+        cursor: pointer;
+        background: #2c2f36;
+      }
+
+      &__subtitle {
+        font-size: 12px !important;
+        // TODO: Fix font weight
+      }
     }
   }
 
