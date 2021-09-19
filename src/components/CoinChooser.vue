@@ -28,43 +28,50 @@
               <span>These tokens are commonly paired with other tokens</span>
             </v-tooltip>
           </div>
-          <div class="coinchooser__common-content d-flex">
+          <v-btn-toggle mandatory v-model="coinChosen" class="coinchooser__common-content d-flex">
             <v-btn
               class="coinchooser__common-tokenbtn mr-2 mt-2"
               v-for="coin in basicCoins"
-              :key="coin.ticker"
+              :key="coin.symbol"
               outlined
             >
               <v-avatar size="24px" class="mr-2">
-                <img :src="coin.logo" width="24px" />
+                <img :src="coin.logoURI" width="24px" />
               </v-avatar>
-              {{ coin.ticker }}
+              {{ coin.symbol }}
             </v-btn>
-          </div>
+          </v-btn-toggle>
         </div>
       </v-card-text>
 
       <v-virtual-scroll :items="fullCoinsList" height="700" item-height="56">
         <template v-slot:default="{ item: coin }">
-          <v-list-item :key="coin.ticker" @click="getTokensList('aaveTokenList')">
-            <v-list-item-avatar
-              width="24px"
-              height="24px"
-              min-width="24px"
-              class="ml-1 mr-4"
+          <v-list-item-group v-model="coinChosen">
+            <v-list-item
+              :key="coin.symbol"
+              :value="coin"
+              @click="setTokenChosen(coin)"
             >
-              <img :src="coin.logo" />
-            </v-list-item-avatar>
+              <v-list-item-avatar
+                v-if="coin.logoURI"
+                width="24px"
+                height="24px"
+                min-width="24px"
+                class="ml-1 mr-4"
+              >
+                <img :src="coin.logoURI" />
+              </v-list-item-avatar>
 
-            <v-list-item-content>
-              <v-list-item-title>
-                {{ coin.ticker }}
-              </v-list-item-title>
-              <v-list-item-subtitle>
-                {{ coin.fullname }}
-              </v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>
+                  {{ coin.symbol }}
+                </v-list-item-title>
+                <v-list-item-subtitle>
+                  {{ coin.name }}
+                </v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
         </template>
       </v-virtual-scroll>
 
@@ -81,10 +88,11 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Watch } from "vue-property-decorator";
 import { tokenChooserStore } from "@/store/tokenChooserStore";
 import { COINS, ECoinsList } from "@/enums/enums";
 import { getCoinLogo } from "@/utils";
+import { TToken } from "@/models/main";
 
 type TFullCoinListItem = {
   ticker: string;
@@ -95,6 +103,7 @@ type TFullCoinListItem = {
 @Component
 export default class CoinChooser extends Vue {
   coinName = "";
+  coinChosen = "";
 
   get isOpen(): boolean {
     return tokenChooserStore.state.isModalOpen;
@@ -104,39 +113,35 @@ export default class CoinChooser extends Vue {
     tokenChooserStore.updateState({ isModalOpen: value });
   }
 
-  getTokensList(name: string) {
-    tokenChooserStore.actions.getTokensList(name)
+  getTokensList(name: string): void {
+    tokenChooserStore.actions.getTokensList(name);
+  }
+
+  setTokenChosen(token: TToken): void {
+    console.log({ token });
+    tokenChooserStore.mutations.setTokenChosen(token)
   }
 
   closeModal(): void {
     this.isOpen = false;
   }
 
-  get basicCoins(): { ticker: string; logo: unknown }[] {
-    let coins = [];
-    for (const ticker in COINS) {
-      if (Object.prototype.hasOwnProperty.call(COINS, ticker)) {
-        const coin = COINS[ticker as ECoinsList];
-        coins.push({ ticker, logo: getCoinLogo(coin.logo) });
-      }
-    }
-    return coins;
+  get basicCoins(): TToken[] {
+    return tokenChooserStore.getters.basicTokensList
   }
 
-  get fullCoinsList(): TFullCoinListItem[] {
-    // TODO! Move coins list to store
-    let coins = [];
-    for (const ticker in COINS) {
-      if (Object.prototype.hasOwnProperty.call(COINS, ticker)) {
-        const coin = COINS[ticker as ECoinsList];
-        coins.push({
-          ticker,
-          logo: getCoinLogo(coin.logo),
-          fullname: coin.fullname,
-        });
-      }
-    }
-    return coins;
+  get fullCoinsList(): TToken[] {
+    return tokenChooserStore.getters.fullTokensList
+  }
+
+  @Watch("coinChosen")
+  onCoinChosenChange(newVal: any) {
+    console.log({ newVal });
+  }
+
+  mounted(): void {
+    tokenChooserStore.actions.getTokensList('arbitrumOne')
+    tokenChooserStore.actions.getTokensList('optimism')
   }
 }
 </script>
@@ -195,6 +200,7 @@ export default class CoinChooser extends Vue {
     }
 
     &-content {
+      background: #191b1f !important;
       display: flex;
       flex-wrap: wrap;
     }

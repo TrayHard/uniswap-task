@@ -10,10 +10,22 @@ export type TToken = {
   symbol: string,
   address: string,
   chainId: number,
-  tags: string[]
+  tags?: string[],
+  logoURI?: string,
+  extensions?: Record<string, string>,
 }
 
 export type TTag = {
   name: string,
   description: string,
+}
+
+export type TTokenList = {
+  name: string,
+  logoURI?: string,
+  keywords?: string[],
+  tags?: Record<string, TTag>,
+  tokens: TToken[],
+  timestamp: string,
+  version: Record<string, number>,
 }

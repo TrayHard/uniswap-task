@@ -1,4 +1,4 @@
-import { TTag, TToken } from "./main";
+import { TTag, TToken, TTokenList } from "./main";
 
 export type TApiResponse<T> = IApiSuccessResponse<T> | IApiErrorResponse;
 
@@ -30,12 +30,4 @@ export interface IMockItem<T> {
   'mockData': TApiResponse<T>,
 }
 
-export type TApiTokensListResponse = {
-  name: string,
-  logoURI: string,
-  keywords: string[],
-  tags: Record<string, TTag>,
-  tokens: TToken[],
-  timestamp: string,
-  version: Record<string, number>,
-}
+export type TApiTokensListResponse = TTokenList
