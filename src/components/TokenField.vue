@@ -1,20 +1,20 @@
 <template>
-  <div class="coinfield">
-    <div class="coinfield__main">
-      <div class="coinfield__coin-choose">
+  <div class="tokenfield">
+    <div class="tokenfield__main">
+      <div class="tokenfield__coin-choose">
         <v-btn
-          v-if="coin"
+          v-if="token"
           rounded
-          class="coinfield__coin px-2"
+          class="tokenfield__coin px-2"
           color="colorDarkBg"
-          @click="openCoinChooser"
+          @click="openTokenChooser"
         >
           <img
-            :src="coinLogo"
+            :src="tokenLogo"
             width="24px"
             class="mr-3"
           >
-          {{ coin }}
+          {{ token }}
           <v-icon class="ml-1">mdi-chevron-down</v-icon>
         </v-btn>
         <v-btn
@@ -22,7 +22,7 @@
           color="#2172e5"
           rounded
           class="px-3"
-          @click="openCoinChooser"
+          @click="openTokenChooser"
         >
           Select a token
           <v-icon class="ml-1">mdi-chevron-down</v-icon>
@@ -54,33 +54,38 @@ import { Component, Prop, ModelSync, Mixins } from "vue-property-decorator";
 import MainMixin from '@/mixins/main';
 import { COINS, ECoinsList } from "@/enums/enums";
 import { getCoinLogo } from '@/utils';
+import { TToken } from "@/models/main";
 
 @Component
-export default class CoinField extends Mixins(MainMixin) {
+export default class TokenField extends Mixins(MainMixin) {
   @ModelSync("value", "input", { type: String, default: null })
   amount!: string | null;
 
   @Prop({ type: String, default: null })
-  coin!: ECoinsList;
+  token!: ECoinsList;
 
-  get coinLogo(): unknown {
-    return getCoinLogo(COINS[this.coin].logo);
+  get tokenLogo(): unknown {
+    return getCoinLogo(COINS[this.token].logo);
   }
 
   get equivalent(): string {
-    return this.coin && this.amount
-      ? (COINS[this.coin].equivalent * +this.amount).toString()
+    return this.token && this.amount
+      ? (COINS[this.token].equivalent * +this.amount).toString()
       : "";
   }
 
-  openCoinChooser(): void {
+  openTokenChooser(): void {
     this.store.tokenChooser.setIsModalOpen(true);
+    const unwatch = this.$watch('store.tokenChooser.tokenChosen', (token: TToken) => {
+      this.$emit('tokenChanged', token)
+      unwatch()
+    })
   }
 }
 </script>
 
 <style lang="scss">
-.coinfield {
+.tokenfield {
   height: 85px;
   background: #212429;
   border: 1px solid #2c2f36;

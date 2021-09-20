@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import CoinChooser from "@/components/CoinChooser.vue";
+import CoinChooser from "@/components/TokenChooser.vue";
 
 @Component({ components: { CoinChooser } })
 export default class App extends Vue {

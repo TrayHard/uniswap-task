@@ -6,18 +6,19 @@
     </v-card-title>
 
     <v-card-text>
-      <div class="swapper__coins">
-        <div class="swapper__coins-wrapper">
-          <CoinField
-            v-model="coindata[0].amount"
-            :coin.sync="coindata[0].name"
+      <div class="swapper__tokens">
+        <div class="swapper__tokens-wrapper">
+          <TokenField
+            v-model="tokenData[0].amount"
+            :coin.sync="tokenData[0].name"
+            @token-changed="onTokenChanged(0, )"
           />
-          <CoinField
-            v-model="coindata[1].amount"
-            :coin.sync="coindata[1].name"
+          <TokenField
+            v-model="tokenData[1].amount"
+            :coin.sync="tokenData[1].name"
           />
         </div>
-        <div class="swapper__coins-button" @click="coindata.reverse()">
+        <div class="swapper__tokens-button" @click="tokenData.reverse()">
           <v-icon small>mdi-cached</v-icon>
         </div>
       </div>
@@ -33,11 +34,12 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import CoinField from "@/components/CoinField.vue";
+import TokenField from "@/components/TokenField.vue";
+import { TToken } from "@/models/main";
 
-@Component({ components: { CoinField } })
+@Component({ components: { TokenField } })
 export default class Home extends Vue {
-  coindata = [
+  tokenData: TToken[] = [
     {
       name: "ETH",
       amount: null,
@@ -69,7 +71,7 @@ export default class Home extends Vue {
     color: $colorLightBlue;
   }
 
-  &__coins {
+  &__tokens {
     position: relative;
 
     &-wrapper {
