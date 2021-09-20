@@ -9,16 +9,18 @@
       <div class="swapper__tokens">
         <div class="swapper__tokens-wrapper">
           <TokenField
-            v-model="tokenData[0].amount"
-            :coin.sync="tokenData[0].name"
-            @token-changed="onTokenChanged(0, )"
+            ref="tokenfield1"
+            v-model="tokenFieldsData[0].amount"
+            :token.sync="tokenFieldsData[0].token"
+            @tokenChanged="onTokenChanged(0, $event)"
           />
           <TokenField
-            v-model="tokenData[1].amount"
-            :coin.sync="tokenData[1].name"
+            v-model="tokenFieldsData[1].amount"
+            :token.sync="tokenFieldsData[1].token"
+            @tokenChanged="onTokenChanged(1, $event)"
           />
         </div>
-        <div class="swapper__tokens-button" @click="tokenData.reverse()">
+        <div class="swapper__tokens-button" @click="tokenFieldsData.reverse()">
           <v-icon small>mdi-cached</v-icon>
         </div>
       </div>
@@ -33,22 +35,53 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Mixins } from "vue-property-decorator";
 import TokenField from "@/components/TokenField.vue";
 import { TToken } from "@/models/main";
+import MainMixin from "@/mixins/main";
+
+type TTokenFieldItem = {
+  token?: TToken | null;
+  amount: string | null;
+};
 
 @Component({ components: { TokenField } })
-export default class Home extends Vue {
-  tokenData: TToken[] = [
+export default class Home extends Mixins(MainMixin) {
+  $refs!: {
+    tokenfield1: TokenField;
+  };
+
+  tokenFieldsData: TTokenFieldItem[] = [
     {
-      name: "ETH",
+      token: null,
       amount: null,
     },
     {
-      name: undefined,
+      token: null,
       amount: null,
     },
   ];
+
+  async loadTokensLists(): Promise<void> {
+    await this.store.tokenChooser.getTokensList("arbitrumOne");
+    await this.store.tokenChooser.getTokensList("optimism");
+  }
+
+  onTokenChanged(index: number, token: TToken): void {
+    console.log({ index, token });
+    this.$set(this.tokenFieldsData[index], "token", token);
+  }
+
+  async mounted(): Promise<void> {
+    this.$refs.tokenfield1.setLoadingState(true);
+    await this.loadTokensLists();
+    const ethToken = this.store.tokenChooser.basicTokensList.find(
+      (e) => e.symbol === "ETH"
+    );
+    this.$set(this.tokenFieldsData[0], "token", ethToken);
+    this.$set(this.tokenFieldsData[0], "amount", "");
+    this.$refs.tokenfield1.setLoadingState(false);
+  }
 }
 </script>
 

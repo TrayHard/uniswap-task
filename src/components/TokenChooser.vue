@@ -130,11 +130,6 @@ export default class TokenChooser extends Mixins(MainMixin) {
   onTokenChosen(): void {
     this.closeModal()
   }
-
-  mounted(): void {
-    this.store.tokenChooser.getTokensList('arbitrumOne')
-    this.store.tokenChooser.getTokensList('optimism')
-  }
 }
 </script>
 

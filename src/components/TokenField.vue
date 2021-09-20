@@ -3,18 +3,28 @@
     <div class="tokenfield__main">
       <div class="tokenfield__coin-choose">
         <v-btn
-          v-if="token"
+          v-if="isLoading"
+          rounded
+          :loading="isLoading"
+          color="colorDarkBg"
+          width="115px"
+        >
+          <v-icon>mdi-load</v-icon>
+        </v-btn>
+        <v-btn
+          v-else-if="lToken"
           rounded
           class="tokenfield__coin px-2"
           color="colorDarkBg"
           @click="openTokenChooser"
         >
-          <img
-            :src="tokenLogo"
-            width="24px"
-            class="mr-3"
-          >
-          {{ token }}
+          <v-avatar size="24px" class="mr-2">
+            <img
+              :src="lToken.logoURI"
+              width="24px"
+            >
+          </v-avatar>
+          {{ lToken.symbol }}
           <v-icon class="ml-1">mdi-chevron-down</v-icon>
         </v-btn>
         <v-btn
@@ -28,7 +38,7 @@
           <v-icon class="ml-1">mdi-chevron-down</v-icon>
         </v-btn>
       </div>
-      <div class="coinfield__input">
+      <div class="tokenfield__input">
         <input
           v-model="amount"
           type="text"
@@ -43,17 +53,15 @@
         >
       </div>
     </div>
-    <div class="coinfield__under">
+    <div class="tokenfield__under">
       <span v-if="equivalent">{{ equivalent }}</span>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, ModelSync, Mixins } from "vue-property-decorator";
+import { Component, ModelSync, Mixins, PropSync } from "vue-property-decorator";
 import MainMixin from '@/mixins/main';
-import { COINS, ECoinsList } from "@/enums/enums";
-import { getCoinLogo } from '@/utils';
 import { TToken } from "@/models/main";
 
 @Component
@@ -61,25 +69,29 @@ export default class TokenField extends Mixins(MainMixin) {
   @ModelSync("value", "input", { type: String, default: null })
   amount!: string | null;
 
-  @Prop({ type: String, default: null })
-  token!: ECoinsList;
+  @PropSync('token', { type: Object })
+  lToken?: TToken | null;
 
-  get tokenLogo(): unknown {
-    return getCoinLogo(COINS[this.token].logo);
-  }
+  isLoading = false
 
   get equivalent(): string {
-    return this.token && this.amount
-      ? (COINS[this.token].equivalent * +this.amount).toString()
-      : "";
+    return ''
+    // return this.token && this.amount
+    //   ? (COINS[this.token].equivalent * +this.amount).toString()
+    //   : "";
   }
 
   openTokenChooser(): void {
     this.store.tokenChooser.setIsModalOpen(true);
     const unwatch = this.$watch('store.tokenChooser.tokenChosen', (token: TToken) => {
+      console.log('watcher');
       this.$emit('tokenChanged', token)
       unwatch()
     })
+  }
+
+  setLoadingState(value: boolean): void {
+    this.isLoading = value
   }
 }
 </script>
