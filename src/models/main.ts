@@ -1,9 +1,3 @@
-export type TCoin = {
-  logo: string,
-  equivalent: number,
-  fullname: string,
-}
-
 export type TToken = {
   name: string,
   decimals: number,

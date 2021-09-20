@@ -1,7 +1,7 @@
 <template>
   <div class="tokenfield">
     <div class="tokenfield__main">
-      <div class="tokenfield__coin-choose">
+      <div class="tokenfield__token-choose">
         <v-btn
           v-if="isLoading"
           rounded
@@ -14,7 +14,7 @@
         <v-btn
           v-else-if="lToken"
           rounded
-          class="tokenfield__coin px-2"
+          class="tokenfield__token px-2"
           color="colorDarkBg"
           @click="openTokenChooser"
         >
