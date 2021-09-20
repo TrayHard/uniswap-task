@@ -1,12 +1,15 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import { Database } from "vuex-typed-modules";
-import { tokenChooserStore } from '@/store/tokenChooserStore'
+import Vue from 'vue';
+import Vuex from 'vuex';
+import { createVuexStore } from 'vuex-simple';
+
+import { RootStore } from './store';
 
 Vue.use(Vuex);
 
-const database = new Database({ logger: true });
+const instance = new RootStore();
 
-export default new Vuex.Store({
-  plugins: [database.deploy([tokenChooserStore])]
-})
+export default createVuexStore(instance, {
+  strict: false,
+  modules: {},
+  plugins: []
+});

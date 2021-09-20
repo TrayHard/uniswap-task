@@ -88,38 +88,29 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Watch } from "vue-property-decorator";
-import { tokenChooserStore } from "@/store/tokenChooserStore";
-import { COINS, ECoinsList } from "@/enums/enums";
-import { getCoinLogo } from "@/utils";
+import { Component, Watch, Mixins } from "vue-property-decorator";
 import { TToken } from "@/models/main";
-
-type TFullCoinListItem = {
-  ticker: string;
-  logo: unknown;
-  fullname: string;
-};
+import MainMixin from "@/mixins/main";
 
 @Component
-export default class CoinChooser extends Vue {
+export default class CoinChooser extends Mixins(MainMixin) {
   coinName = "";
   coinChosen = "";
 
   get isOpen(): boolean {
-    return tokenChooserStore.state.isModalOpen;
+    return this.store.tokenChooser.isModalOpen;
   }
 
   set isOpen(value: boolean) {
-    tokenChooserStore.updateState({ isModalOpen: value });
+    this.store.tokenChooser.setIsModalOpen(value);
   }
 
   getTokensList(name: string): void {
-    tokenChooserStore.actions.getTokensList(name);
+    this.store.tokenChooser.getTokensList(name);
   }
 
   setTokenChosen(token: TToken): void {
-    console.log({ token });
-    tokenChooserStore.mutations.setTokenChosen(token)
+    this.store.tokenChooser.setTokenChosen(token);
   }
 
   closeModal(): void {
@@ -127,11 +118,11 @@ export default class CoinChooser extends Vue {
   }
 
   get basicCoins(): TToken[] {
-    return tokenChooserStore.getters.basicTokensList
+    return this.store.tokenChooser.basicTokensList
   }
 
   get fullCoinsList(): TToken[] {
-    return tokenChooserStore.getters.fullTokensList
+    return this.store.tokenChooser.fullTokensList
   }
 
   @Watch("coinChosen")
@@ -140,8 +131,8 @@ export default class CoinChooser extends Vue {
   }
 
   mounted(): void {
-    tokenChooserStore.actions.getTokensList('arbitrumOne')
-    tokenChooserStore.actions.getTokensList('optimism')
+    this.store.tokenChooser.getTokensList('arbitrumOne')
+    this.store.tokenChooser.getTokensList('optimism')
   }
 }
 </script>

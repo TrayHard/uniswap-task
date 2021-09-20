@@ -50,13 +50,13 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, ModelSync } from "vue-property-decorator";
+import { Component, Prop, ModelSync, Mixins } from "vue-property-decorator";
+import MainMixin from '@/mixins/main';
 import { COINS, ECoinsList } from "@/enums/enums";
-import { tokenChooserStore } from "@/store/tokenChooserStore";
 import { getCoinLogo } from '@/utils';
 
 @Component
-export default class CoinField extends Vue {
+export default class CoinField extends Mixins(MainMixin) {
   @ModelSync("value", "input", { type: String, default: null })
   amount!: string | null;
 
@@ -74,7 +74,7 @@ export default class CoinField extends Vue {
   }
 
   openCoinChooser(): void {
-    tokenChooserStore.updateState({ isModalOpen: true });
+    this.store.tokenChooser.setIsModalOpen(true);
   }
 }
 </script>
