@@ -12,7 +12,7 @@ import klerosTokens from './tokenLists/Kleros Tokens.json';
 import optimism from './tokenLists/Optimism.json';
 import wrappedTokens from './tokenLists/Wrapped Tokens.json';
 
-export type TMocks = {[key in EApiEndpoints]?: Record<string, IMockItem<any>>};
+export type TMocks = {[key in EApiEndpoints]?: Record<string, IMockItem<unknown>>};
 
 const mocks: TMocks = {
   getTokensList: {
