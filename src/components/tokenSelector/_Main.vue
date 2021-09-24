@@ -48,7 +48,7 @@
       </div>
     </v-card-text>
 
-    <v-virtual-scroll :items="fullTokensList" height="100%" item-height="56">
+    <v-virtual-scroll :items="fullTokensList" item-height="56">
       <template v-slot:default="{ item: token }">
         <v-list-item-group v-model="tokenChosen">
           <v-list-item
