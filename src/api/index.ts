@@ -1,15 +1,17 @@
-import { EApiErrors, EApiMethods, IMockItem, TApiAllTokensListsResponse, TApiResponse, TApiTokensListResponse } from '@/models/api';
+import { EApiErrors, EApiMethods, IMockItem, TApiAllTokensListsResponse, TApiGetBalanceResponse, TApiResponse, TApiTokensListResponse } from '@/models/api';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import mocks from './mocks';
 
 export enum EApiEndpoints {
   getTokensList = 'getTokensList',
   getAllTokensLists = 'getAllTokensLists',
+  getBalance = 'getBalance',
 }
 
 const isMocked: Record<EApiEndpoints, boolean> = {
   getTokensList: true,
   getAllTokensLists: true,
+  getBalance: true,
 };
 
 export class Api {
@@ -84,6 +86,18 @@ export class Api {
       } });
     } else if (mocks.getAllTokensLists) {
       return this.doRequest<TApiAllTokensListsResponse>({ mock: mocks.getAllTokensLists.success });
+    } else throw new Error(EApiErrors.NO_MOCK);
+  }
+
+  [EApiEndpoints.getBalance](tokenSymbol: string): Promise<TApiResponse<TApiGetBalanceResponse>> {
+    if (!isMocked.getBalance) {
+      return this.doRequest<TApiGetBalanceResponse>({ options: {
+        method: EApiMethods.GET,
+        url: 'getBalance',
+        params: { tokenSymbol }
+      } });
+    } else if (mocks.getBalance) {
+      return this.doRequest<TApiGetBalanceResponse>({ mock: mocks.getBalance.success });
     } else throw new Error(EApiErrors.NO_MOCK);
   }
 }

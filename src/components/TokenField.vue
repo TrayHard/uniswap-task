@@ -54,7 +54,9 @@
       </div>
     </div>
     <div class="tokenfield__under">
-      <span v-if="equivalent">{{ equivalent }}</span>
+      <span class="tokenfield__under-balance" v-if="currBalance">Balance: {{ currBalance }}</span>
+      <v-spacer />
+      <span class="tokenfield__under-equivalent" v-if="amount">{{ equivalent }}</span>
     </div>
   </div>
 </template>
@@ -81,6 +83,10 @@ export default class TokenField extends Mixins(MainMixin) {
     //   : "";
   }
 
+  get currBalance(): number {
+    return 2
+  }
+
   openTokenSelector(): void {
     this.store.tokenSelector.setIsModalOpen(true);
     const unwatch = this.$watch('store.tokenSelector.tokenChosen', (token: TToken) => {
@@ -98,11 +104,11 @@ export default class TokenField extends Mixins(MainMixin) {
 
 <style lang="scss">
 .tokenfield {
-  height: 85px;
+  height: auto;
   background: #212429;
   border: 1px solid #2c2f36;
   border-radius: 20px;
-  padding: 20px 16px 40px 16px;
+  padding: 20px 16px;
 
   &:hover,
   &:focus {
@@ -137,9 +143,9 @@ export default class TokenField extends Mixins(MainMixin) {
 
   &__under {
     display: flex;
-    justify-content: flex-end;
+    margin-top: 12px;
 
-    span {
+    &-equivalent {
       &::before {
         content: "~$ ";
       }

@@ -50,6 +50,15 @@ const mocks: TMocks = {
       },
     },
   },
+  getBalance: {
+    ETH: {
+      timeout: 1000,
+      mockData: {
+        success: true,
+        data: 0,
+      },
+    },
+  },
 }
 
 export default mocks

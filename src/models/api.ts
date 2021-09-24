@@ -32,3 +32,4 @@ export interface IMockItem<T> {
 
 export type TApiTokensListResponse = TTokenList
 export type TApiAllTokensListsResponse = TTokenList[]
+export type TApiGetBalanceResponse = number
