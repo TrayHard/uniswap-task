@@ -1,7 +1,7 @@
 import { Module } from 'vuex-simple';
-import { TokenChooserModule } from './tokenChooserStore';
+import { TokenSelectorModule as TokenSelectorModule } from './tokenSelectorStore';
 
 export class RootStore {
   @Module()
-  public tokenChooser = new TokenChooserModule();
+  public tokenSelector = new TokenSelectorModule();
 }

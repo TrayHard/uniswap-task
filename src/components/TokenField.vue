@@ -16,7 +16,7 @@
           rounded
           class="tokenfield__token px-2"
           color="colorDarkBg"
-          @click="openTokenChooser"
+          @click="openTokenSelector"
         >
           <v-avatar size="24px" class="mr-2">
             <img
@@ -32,7 +32,7 @@
           color="#2172e5"
           rounded
           class="px-3"
-          @click="openTokenChooser"
+          @click="openTokenSelector"
         >
           Select a token
           <v-icon class="ml-1">mdi-chevron-down</v-icon>
@@ -81,9 +81,9 @@ export default class TokenField extends Mixins(MainMixin) {
     //   : "";
   }
 
-  openTokenChooser(): void {
-    this.store.tokenChooser.setIsModalOpen(true);
-    const unwatch = this.$watch('store.tokenChooser.tokenChosen', (token: TToken) => {
+  openTokenSelector(): void {
+    this.store.tokenSelector.setIsModalOpen(true);
+    const unwatch = this.$watch('store.tokenSelector.tokenChosen', (token: TToken) => {
       console.log('watcher');
       this.$emit('tokenChanged', token)
       unwatch()

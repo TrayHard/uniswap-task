@@ -12,64 +12,15 @@ import klerosTokens from './tokenLists/Kleros Tokens.json';
 import optimism from './tokenLists/Optimism.json';
 import wrappedTokens from './tokenLists/Wrapped Tokens.json';
 
-export type TMocks = {[key in EApiEndpoints]?: Record<string, IMockItem<unknown>>};
+export type TMocks = {[key in EApiEndpoints]?: Record<string, IMockItem<any>>};
 
 const mocks: TMocks = {
   getTokensList: {
-    aaveTokenList: {
-      timeout: 1000,
-      mockData: {
-        success: true,
-        data: aaveTokenList,
-      },
-    },
     arbitrumOne: {
       timeout: 1000,
       mockData: {
         success: true,
         data: arbitrumOne,
-      },
-    },
-    basic: {
-      timeout: 1000,
-      mockData: {
-        success: true,
-        data: basic,
-      },
-    },
-    cmcDefi: {
-      timeout: 1000,
-      mockData: {
-        success: true,
-        data: cmcDefi,
-      },
-    },
-    cmcStablecoin: {
-      timeout: 1000,
-      mockData: {
-        success: true,
-        data: cmcStablecoin,
-      },
-    },
-    coinGecko: {
-      timeout: 1000,
-      mockData: {
-        success: true,
-        data: coinGecko,
-      },
-    },
-    compound: {
-      timeout: 1000,
-      mockData: {
-        success: true,
-        data: compound,
-      },
-    },
-    klerosTokens: {
-      timeout: 1000,
-      mockData: {
-        success: true,
-        data: klerosTokens,
       },
     },
     optimism: {
@@ -79,18 +30,23 @@ const mocks: TMocks = {
         data: optimism,
       },
     },
-    wrappedTokens: {
-      timeout: 1000,
-      mockData: {
-        success: true,
-        data: wrappedTokens,
-      },
-    },
     failed: {
       timeout: 3000,
       mockData: {
         success: false,
-        error: new Error('Ошибочка!'),
+        error: new Error('Mock Error!'),
+      },
+    },
+  },
+  getAllTokensLists: {
+    success: {
+      timeout: 1000,
+      mockData: {
+        success: true,
+        data: [
+          arbitrumOne,
+          optimism,
+        ],
       },
     },
   },

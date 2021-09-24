@@ -1,35 +1,39 @@
 <template>
-  <div>
-    <v-card-title class="tokenchooser__title">
+  <div class="ts-main-window">
+    <v-card-title class="ts-main-window__title">
       Select a token
       <v-icon @click="closeModal">mdi-close</v-icon>
     </v-card-title>
 
-    <v-card-text class="tokenchooser__body">
+    <v-card-text class="ts-main-window__body">
       <v-text-field
         v-model="tokenName"
-        class="tokenchooser__search"
+        class="ts-main-window__search"
         outlined
         rounded
         name="tokenname"
         placeholder="Search name or paste address"
         hide-details
       />
-      <div class="tokenchooser__common">
-        <div class="tokenchooser__common-title">
+      <div class="ts-main-window__common">
+        <div class="ts-main-window__common-title">
           Common bases
-          <v-tooltip bottom content-class="tokenchooser__common-tooltip">
+          <v-tooltip bottom content-class="ts-main-window__common-tooltip">
             <template v-slot:activator="{ on, attrs }">
-              <div class="tokenchooser__common-hint" v-bind="attrs" v-on="on">
+              <div class="ts-main-window__common-hint" v-bind="attrs" v-on="on">
                 ?
               </div>
             </template>
             <span>These tokens are commonly paired with other tokens</span>
           </v-tooltip>
         </div>
-        <v-btn-toggle mandatory v-model="tokenChosen" class="tokenchooser__common-content d-flex">
+        <v-btn-toggle
+          mandatory
+          v-model="tokenChosen"
+          class="ts-main-window__common-content d-flex"
+        >
           <v-btn
-            class="tokenchooser__common-tokenbtn mr-2 mt-2"
+            class="ts-main-window__common-tokenbtn mr-2 mt-2"
             v-for="token in basicTokens"
             :key="token.symbol"
             outlined
@@ -44,7 +48,7 @@
       </div>
     </v-card-text>
 
-    <v-virtual-scroll :items="fullTokensList" height="700" item-height="56">
+    <v-virtual-scroll :items="fullTokensList" height="100%" item-height="56">
       <template v-slot:default="{ item: token }">
         <v-list-item-group v-model="tokenChosen">
           <v-list-item
@@ -75,7 +79,7 @@
       </template>
     </v-virtual-scroll>
 
-    <v-card-actions class="tokenchooser__footer">
+    <v-card-actions class="ts-main-window__footer">
       <div @click="onManageTokenListsClick">
         <v-icon small color="primary" class="mr-1">
           mdi-square-edit-outline
@@ -90,56 +94,63 @@
 import { Component, Watch, Mixins } from "vue-property-decorator";
 import { TToken } from "@/models/main";
 import MainMixin from "@/mixins/main";
-import { ETokenChooserComponents } from "./TokenChooser.vue";
+import { ETokenSelectorComponents } from "./TokenSelector.vue";
 
 @Component
-export default class TokenChooser extends Mixins(MainMixin) {
+export default class TokenSelector extends Mixins(MainMixin) {
   tokenName = "";
   tokenChosen = "";
 
   get isOpen(): boolean {
-    return this.store.tokenChooser.isModalOpen;
+    return this.store.tokenSelector.isModalOpen;
   }
 
   set isOpen(value: boolean) {
-    this.store.tokenChooser.setIsModalOpen(value);
+    this.store.tokenSelector.setIsModalOpen(value);
   }
 
   get basicTokens(): TToken[] {
-    return this.store.tokenChooser.basicTokensList
+    return this.store.tokenSelector.basicTokensList;
   }
 
   get fullTokensList(): TToken[] {
-    return this.store.tokenChooser.fullTokensList
+    return this.store.tokenSelector.fullTokensList;
   }
 
   getTokensList(name: string): void {
-    this.store.tokenChooser.getTokensList(name);
+    this.store.tokenSelector.getTokensList(name);
   }
 
   setTokenChosen(token: TToken): void {
-    this.store.tokenChooser.setTokenChosen(token);
+    this.store.tokenSelector.setTokenChosen(token);
   }
 
   closeModal(): void {
     this.isOpen = false;
   }
 
-  @Watch("store.tokenChooser.tokenChosen")
+  @Watch("store.tokenSelector.tokenChosen")
   onTokenChosen(): void {
-    this.closeModal()
+    this.closeModal();
   }
 
   onManageTokenListsClick(): void {
-    this.$emit('changed', ETokenChooserComponents.tokenLists)
+    this.$emit("changed", ETokenSelectorComponents.tokenManager);
   }
 }
 </script>
 
 <style lang="scss">
-.tokenchooser {
-  border-radius: 20px !important;
-  border: 1px solid #212429;
+.ts-main-window {
+  position: absolute;
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 100%;
+  // top: 0;
+  // left: 0;
+  // min-height: 100%;
+  // grid-template-rows: 60px 225px auto 60px;
 
   &__title {
     display: flex;

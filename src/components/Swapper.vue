@@ -63,19 +63,17 @@ export default class Home extends Mixins(MainMixin) {
   ];
 
   async loadTokensLists(): Promise<void> {
-    await this.store.tokenChooser.getTokensList("arbitrumOne");
-    await this.store.tokenChooser.getTokensList("optimism");
+    await this.store.tokenSelector.getAllTokensLists();
   }
 
   onTokenChanged(index: number, token: TToken): void {
-    console.log({ index, token });
     this.$set(this.tokenFieldsData[index], "token", token);
   }
 
   async mounted(): Promise<void> {
     this.$refs.tokenfield1.setLoadingState(true);
     await this.loadTokensLists();
-    const ethToken = this.store.tokenChooser.basicTokensList.find(
+    const ethToken = this.store.tokenSelector.basicTokensList.find(
       (e) => e.symbol === "ETH"
     );
     this.$set(this.tokenFieldsData[0], "token", ethToken);

@@ -22,4 +22,5 @@ export type TTokenList = {
   tokens: TToken[],
   timestamp: string,
   version: Record<string, number>,
+  active: boolean,
 }

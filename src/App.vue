@@ -35,7 +35,7 @@
       </div>
       <v-main>
         <router-view />
-        <TokenChooser />
+        <TokenSelector />
       </v-main>
     </v-app>
   </div>
@@ -43,9 +43,9 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from "vue-property-decorator";
-import TokenChooser from "@/components/tokenChooser/TokenChooser.vue";
+import TokenSelector from "@/components/tokenSelector/TokenSelector.vue";
 
-@Component({ components: { TokenChooser } })
+@Component({ components: { TokenSelector } })
 export default class App extends Vue {
   route = "Swap";
 
