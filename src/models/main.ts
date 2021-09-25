@@ -24,3 +24,7 @@ export type TTokenList = {
   version: Record<string, number>,
   active: boolean,
 }
+
+export type TWallet = {
+  address: string,
+}

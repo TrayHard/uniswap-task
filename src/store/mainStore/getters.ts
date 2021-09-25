@@ -3,7 +3,7 @@ import { MainState } from "./state"
 
 export class MainGetters extends MainState {
   @Getter()
-  get test(): number {
-    return 0;
+  get currEthBalance(): number {
+    return this.balances.ETH
   }
 }

@@ -1,64 +1,56 @@
 import { IMockItem } from "@/models/api";
 import { EApiEndpoints } from "@/api";
 
-import aaveTokenList from './tokenLists/Aave Token List.json';
-import arbitrumOne from './tokenLists/Arbitrum One.json';
-import basic from './tokenLists/Basic.json';
-import cmcDefi from './tokenLists/CMC Defi.json';
-import cmcStablecoin from './tokenLists/CMC Stablecoin.json';
-import coinGecko from './tokenLists/CoinGecko.json';
-import compound from './tokenLists/Compound.json';
-import klerosTokens from './tokenLists/Kleros Tokens.json';
-import optimism from './tokenLists/Optimism.json';
-import wrappedTokens from './tokenLists/Wrapped Tokens.json';
+import arbitrumOne from "./tokenLists/Arbitrum One.json";
+import optimism from "./tokenLists/Optimism.json";
 
-export type TMocks = {[key in EApiEndpoints]?: Record<string, IMockItem<any>>};
+export type TMocks = {
+  [key in EApiEndpoints]?: Record<string, IMockItem<any>>;
+};
+
+export const getRandomDelay = (): number => {
+  const DELAY_MIN = 1000
+  const DELAY_RANGE = 2000
+  return DELAY_MIN + Math.random() * DELAY_RANGE
+}
 
 const mocks: TMocks = {
   getTokensList: {
     arbitrumOne: {
-      timeout: 1000,
-      mockData: {
-        success: true,
-        data: arbitrumOne,
-      },
+      timeout: 'random',
+      mockData: arbitrumOne,
     },
     optimism: {
-      timeout: 1000,
-      mockData: {
-        success: true,
-        data: optimism,
-      },
+      timeout: 'random',
+      mockData: optimism,
     },
     failed: {
-      timeout: 3000,
-      mockData: {
-        success: false,
-        error: new Error('Mock Error!'),
-      },
+      timeout: 'random',
+      mockData: new Error("Mock Error!"),
     },
   },
   getAllTokensLists: {
     success: {
-      timeout: 1000,
-      mockData: {
-        success: true,
-        data: [
-          arbitrumOne,
-          optimism,
-        ],
-      },
+      timeout: 'random',
+      mockData: [arbitrumOne, optimism],
     },
   },
   getBalance: {
     ETH: {
-      timeout: 1000,
-      mockData: {
-        success: true,
-        data: 0,
-      },
+      timeout: 'random',
+      mockData: 0.192992,
+    },
+    USDT: {
+      timeout: 'random',
+      mockData: 32.5,
     },
   },
-}
+  getWallet: {
+    success: {
+      timeout: 'random',
+      mockData: { address: '0x160Ff42A636702afde1303175810D3bBF0305AE4' }
+    }
+  }
+};
 
-export default mocks
+export default mocks;
