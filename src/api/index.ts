@@ -1,17 +1,19 @@
-import { EApiErrors, EApiMethods, IMockItem, TApiAllTokensListsResponse, TApiGetBalanceResponse, TApiResponse, TApiTokensListResponse } from '@/models/api';
+import { EApiErrors, EApiMethods, IMockItem, TApiAllTokensListsResponse, TApiGetBalanceResponse, TApiGetWalletResponse, TApiTokensListResponse } from '@/models/api';
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import mocks from './mocks';
+import mocks, { getRandomDelay } from './mocks';
 
 export enum EApiEndpoints {
   getTokensList = 'getTokensList',
   getAllTokensLists = 'getAllTokensLists',
   getBalance = 'getBalance',
+  getWallet = 'getWallet',
 }
 
 const isMocked: Record<EApiEndpoints, boolean> = {
   getTokensList: true,
   getAllTokensLists: true,
   getBalance: true,
+  getWallet: true,
 };
 
 export class Api {
@@ -23,12 +25,12 @@ export class Api {
     } else throw new Error(EApiErrors.NO_API_PATH);
   }
 
-  private async doRequest<T>(args: { options?: AxiosRequestConfig | null, mock?: IMockItem<T> }): Promise<TApiResponse<T>> {
+  private async doRequest<T>(args: { options?: AxiosRequestConfig | null, mock?: IMockItem<T> }): Promise<T> {
     const { options, mock } = args;
     if (mock) {
       return new Promise(resolve => setTimeout(() => {
         resolve(mock.mockData);
-      }, mock.timeout));
+      }, mock.timeout == 'random' ? getRandomDelay() : mock.timeout));
     } else if (!options) {
       throw new Error(EApiErrors.INCORRECT_CALL);
     }
@@ -48,16 +50,10 @@ export class Api {
 
     this.axiosInstance.interceptors.response.use(
       response => {
-        if (SUCCESS_CODES.includes(response.status)) return {
-          success: true,
-          data: response.data,
-        }
-        else return {
-          success: false,
-          error: response.statusText,
-        }
+        if (SUCCESS_CODES.includes(response.status)) return response.data
+        else throw response.statusText
       },
-      error => ({
+      error => Promise.reject({
         success: false,
         error: error?.response || error,
       })
@@ -66,7 +62,7 @@ export class Api {
     return this.axiosInstance.request(requestParams);
   }
 
-  [EApiEndpoints.getTokensList](listName: string): Promise<TApiResponse<TApiTokensListResponse>> {
+  [EApiEndpoints.getTokensList](listName: string): Promise<TApiTokensListResponse> {
     if (!isMocked.getTokensList) {
       return this.doRequest<TApiTokensListResponse>({ options: {
         method: EApiMethods.GET,
@@ -78,7 +74,7 @@ export class Api {
     } else throw new Error(EApiErrors.NO_MOCK);
   }
 
-  [EApiEndpoints.getAllTokensLists](): Promise<TApiResponse<TApiAllTokensListsResponse>> {
+  [EApiEndpoints.getAllTokensLists](): Promise<TApiAllTokensListsResponse> {
     if (!isMocked.getAllTokensLists) {
       return this.doRequest<TApiAllTokensListsResponse>({ options: {
         method: EApiMethods.GET,
@@ -89,7 +85,7 @@ export class Api {
     } else throw new Error(EApiErrors.NO_MOCK);
   }
 
-  [EApiEndpoints.getBalance](tokenSymbol: string): Promise<TApiResponse<TApiGetBalanceResponse>> {
+  [EApiEndpoints.getBalance](tokenSymbol: string): Promise<TApiGetBalanceResponse> {
     if (!isMocked.getBalance) {
       return this.doRequest<TApiGetBalanceResponse>({ options: {
         method: EApiMethods.GET,
@@ -97,7 +93,18 @@ export class Api {
         params: { tokenSymbol }
       } });
     } else if (mocks.getBalance) {
-      return this.doRequest<TApiGetBalanceResponse>({ mock: mocks.getBalance.success });
+      return this.doRequest<TApiGetBalanceResponse>({ mock: mocks.getBalance[tokenSymbol] });
+    } else throw new Error(EApiErrors.NO_MOCK);
+  }
+
+  [EApiEndpoints.getWallet](): Promise<TApiGetWalletResponse> {
+    if (!isMocked.getWallet) {
+      return this.doRequest<TApiGetWalletResponse>({ options: {
+        method: EApiMethods.GET,
+        url: 'getWallet',
+      } });
+    } else if (mocks.getWallet) {
+      return this.doRequest<TApiGetWalletResponse>({ mock: mocks.getWallet.success });
     } else throw new Error(EApiErrors.NO_MOCK);
   }
 }

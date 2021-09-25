@@ -6,4 +6,14 @@ export class MainMutations extends MainGetters {
   setConnectedStatus(value: boolean): void {
     this.isConnected = value;
   }
+
+  @Mutation()
+  setWalletAddress(value: string): void {
+    this.address = value;
+  }
+
+  @Mutation()
+  updateBalance(payload: { tokenSymbol: string, amount: number }): void {
+    this.balances = { ...this.balances, [payload.tokenSymbol]: payload.amount }
+  }
 }

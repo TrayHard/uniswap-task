@@ -18,10 +18,32 @@
             >Charts <sup>↗</sup></v-btn
           >
         </v-btn-toggle>
-        <div class="nav__main-controls">
-          <v-btn color="#153d6f70" role="connect" class="px-3">
-            Connect to a wallet
-          </v-btn>
+        <div class="nav__main">
+          <template v-if="!isConnected">
+            <v-btn color="#153d6f70" role="connect" class="px-3">
+              Connect to a wallet
+            </v-btn>
+          </template>
+          <template v-else>
+            <div class="nav__main-info pl-3">
+              <v-icon class="nav__main-loader mr-3" v-if="isBalanceLoading">mdi-autorenew</v-icon>
+              <span class="mr-3" v-else-if="balance">{{ balance }} ETH</span>
+              <div class="nav__main-address">
+                <span class="mr-2">{{ shortenWalletAddress }}</span>
+                <div
+                  style="
+                    overflow: hidden;
+                    width: 16px;
+                    height: 16px;
+                    background-color: rgb(252, 25, 75);
+                    border-radius: 8px;
+                  "
+                >
+                  <img src="@/assets/img/addressIcon.svg" />
+                </div>
+              </div>
+            </div>
+          </template>
           <v-btn
             color="colorDarkBg"
             role="more"
@@ -42,21 +64,47 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Mixins, Watch } from "vue-property-decorator";
 import TokenSelector from "@/components/tokenSelector/TokenSelector.vue";
+import MainMixin from "./mixins/main";
 
 @Component({ components: { TokenSelector } })
-export default class App extends Vue {
+export default class App extends Mixins(MainMixin) {
   route = "Swap";
+
+  isBalanceLoading = true;
 
   @Watch("route")
   onRouteChanged(newRoute: string): void {
     this.$router.push(newRoute.toLowerCase());
   }
+
+  get isConnected(): boolean {
+    return this.store.main.isConnected;
+  }
+
+  get shortenWalletAddress(): string | null {
+    const address = this.store.main.address;
+    return address ? `${address.slice(0, 6)}...${address.slice(-4)}` : null;
+  }
+
+  get balance(): number {
+    return this.store.main.balances.ETH
+  }
+
+  async created(): Promise<void> {
+    await this.store.main.login();
+    await this.store.main.getBalance('ETH');
+    this.isBalanceLoading = false;
+  }
 }
 </script>
 
 <style lang="scss">
+@keyframes spinner {
+  to {transform: rotate(360deg);}
+}
+
 .nav {
   background: #212429;
   display: grid;
@@ -107,7 +155,7 @@ export default class App extends Vue {
     }
   }
 
-  &__main-controls {
+  &__main {
     display: flex;
     flex-direction: row;
     -webkit-box-align: center;
@@ -127,6 +175,37 @@ export default class App extends Vue {
         color: #fff;
         border: 1px solid $colorDarkBg;
       }
+    }
+
+    &-info {
+      display: flex;
+      flex-direction: row;
+      -webkit-box-align: center;
+      align-items: center;
+      background-color: #212429;
+      border-radius: 12px;
+      white-space: nowrap;
+      width: 100%;
+    }
+
+    &-loader {
+      animation: spinner 1s linear infinite;
+    }
+
+    &-address {
+      display: flex;
+      flex-flow: row nowrap;
+      width: 100%;
+      -webkit-box-align: center;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      background-color: rgb(25, 27, 31);
+      border: 1px solid rgb(33, 36, 41);
+      color: rgb(255, 255, 255);
+      font-weight: 500;
     }
   }
 }

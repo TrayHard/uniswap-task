@@ -1,15 +1,4 @@
-import { TTokenList } from "./main";
-
-export type TApiResponse<T> = IApiSuccessResponse<T> | IApiErrorResponse;
-
-export interface IApiSuccessResponse<T> {
-  'success': true,
-  'data': T,
-}
-export interface IApiErrorResponse {
-  'success': false,
-  'error': Error,
-}
+import { TTokenList, TWallet } from "./main";
 
 export enum EApiErrors {
   NO_MOCK = 'No mockup provided',
@@ -26,10 +15,11 @@ export enum EApiMethods {
 }
 
 export interface IMockItem<T> {
-  'timeout'?: number,
-  'mockData': TApiResponse<T>,
+  timeout?: number | 'random',
+  mockData: T,
 }
 
 export type TApiTokensListResponse = TTokenList
 export type TApiAllTokensListsResponse = TTokenList[]
 export type TApiGetBalanceResponse = number
+export type TApiGetWalletResponse = TWallet

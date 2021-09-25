@@ -5,5 +5,8 @@ export class MainState {
   balances: Record<string, number> = {}
 
   @State()
+  address: string | null = null
+
+  @State()
   isConnected = false
 }
