@@ -13,7 +13,7 @@ export class MainMutations extends MainGetters {
   }
 
   @Mutation()
-  updateBalance(payload: { tokenSymbol: string, amount: number }): void {
-    this.balances = { ...this.balances, [payload.tokenSymbol]: payload.amount }
+  updateBalance(payload: { tokenSymbol: string; amount: number }): void {
+    this.balances = { ...this.balances, [payload.tokenSymbol]: payload.amount };
   }
 }

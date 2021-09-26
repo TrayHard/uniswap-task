@@ -4,7 +4,7 @@ import { TokenSelectorGetters } from "./getters";
 
 export class TokenSelectorMutations extends TokenSelectorGetters {
   @Mutation()
-  setTokenChosen(value: TToken): void {
+  setTokenChosen(value: TToken | null): void {
     this.tokenChosen = value;
   }
 

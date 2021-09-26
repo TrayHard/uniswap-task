@@ -37,7 +37,7 @@
       </div>
       <div class="tokenfield__input">
         <input
-          v-model="amount"
+          :value="lAmount"
           type="text"
           inputmode="decimal"
           autocomplete="off"
@@ -47,6 +47,7 @@
           minlength="1"
           maxlength="79"
           spellcheck="false"
+          @input="onAmountChanged"
         />
       </div>
     </div>
@@ -55,7 +56,7 @@
         Balance: {{ currBalance }} {{ this.lToken.symbol }}
       </span>
       <v-spacer />
-      <span class="tokenfield__under-equivalent" v-if="amount">{{
+      <span class="tokenfield__under-equivalent" v-if="lAmount">{{
         equivalent
       }}</span>
     </div>
@@ -69,14 +70,15 @@ import {
   Mixins,
   PropSync,
   Prop,
+  Watch,
 } from "vue-property-decorator";
 import MainMixin from "@/mixins/main";
 import { TToken } from "@/models/main";
 
 @Component
 export default class TokenField extends Mixins(MainMixin) {
-  @ModelSync("value", "input", { type: String, default: null })
-  amount!: string | null;
+  @PropSync("amount", { type: String, default: null })
+  lAmount!: string | null;
 
   @PropSync("token", { type: Object })
   lToken?: TToken | null;
@@ -86,11 +88,12 @@ export default class TokenField extends Mixins(MainMixin) {
 
   isLoading = false;
 
+  usdQuote: null | number = null;
+
   get equivalent(): string {
-    return "";
-    // return this.token && this.amount
-    //   ? (COINS[this.token].equivalent * +this.amount).toString()
-    //   : "";
+    return this.lAmount && this.usdQuote
+      ? (this.usdQuote * +this.lAmount).toPrecision(7).toString()
+      : "";
   }
 
   get currBalance(): number | null {
@@ -104,8 +107,9 @@ export default class TokenField extends Mixins(MainMixin) {
     const unwatch = this.$watch(
       "store.tokenSelector.tokenChosen",
       (token: TToken) => {
-        console.log("watcher");
+        this.store.tokenSelector.setIsModalOpen(false);
         this.$emit("tokenChanged", token);
+        this.store.tokenSelector.setTokenChosen(null);
         unwatch();
       }
     );
@@ -113,6 +117,17 @@ export default class TokenField extends Mixins(MainMixin) {
 
   setLoadingState(value: boolean): void {
     this.isLoading = value;
+  }
+
+  @Watch("lToken")
+  async onTokenChanged(newToken: TToken | null): Promise<void> {
+    this.usdQuote = newToken
+      ? (await this.store.main.getUsdQuote(newToken.symbol)).quote
+      : null;
+  }
+
+  onAmountChanged(e: InputEvent): void {
+    this.$emit("amountChanged", (e.target as HTMLInputElement).value);
   }
 }
 </script>
