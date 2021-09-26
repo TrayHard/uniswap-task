@@ -1,12 +1,12 @@
-import { State } from "vuex-simple"
+import { State } from "vuex-simple";
 
 export class MainState {
   @State()
-  balances: Record<string, number> = {}
+  balances: Record<string, number> = {};
 
   @State()
-  address: string | null = null
+  address: string | null = null;
 
   @State()
-  isConnected = false
+  isConnected = false;
 }
