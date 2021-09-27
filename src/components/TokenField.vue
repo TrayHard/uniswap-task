@@ -26,7 +26,7 @@
         </v-btn>
         <v-btn
           v-else
-          color="$colorBlue"
+          color="colorBlue"
           rounded
           class="px-3"
           @click="openTokenSelector"
@@ -59,12 +59,7 @@
         {{ equivalent | moneyFormat }}
         <span
           v-if="role === 'to'"
-          :class="{
-            'tokenfield__under-equivalent--neutral': delta <= 0 && delta >= -1,
-            'tokenfield__under-equivalent--warning': delta < -1 && delta >= -5,
-            'tokenfield__under-equivalent--negative': delta < -5,
-            'tokenfield__under-equivalent--positive': delta > 0,
-          }"
+          :class="`tokenfield__under-equivalent--${deltaStyle}`"
         >
           ({{ delta }}%)
         </span>
@@ -121,6 +116,23 @@ export default class TokenField extends Mixins(MainMixin) {
     else return null;
   }
 
+  get deltaStyle(): string | null {
+    if (this.delta) {
+      switch (true) {
+        case this.delta <= 0 && this.delta >= -1:
+          return "neutral";
+        case this.delta < -1 && this.delta >= -5:
+          return "warning";
+        case this.delta < -5:
+          return "negative";
+        case this.delta > 0:
+          return "positive";
+        default:
+          return "";
+      }
+    } else return null;
+  }
+
   openTokenSelector(): void {
     this.store.tokenSelector.setIsModalOpen(true);
     const unwatch = this.$watch(
@@ -152,19 +164,9 @@ export default class TokenField extends Mixins(MainMixin) {
     }
   }
 
-  // onInputKeyDown(e: KeyboardEvent) {
-  //   if (/[]/.e.key)
-  //   console.log(e)
-  //   // if ()
-  //   //
-  // }
-
   onAmountChanged(e: InputEvent): void {
     const value = (e.target as HTMLInputElement).value;
-    this.$emit(
-      "amountChanged",
-      /^[0-9]*[.,]?[0-9]*$/.test(value) ? value : this.lAmount
-    );
+    this.$emit("amountChanged", value);
   }
 }
 </script>
