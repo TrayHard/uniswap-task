@@ -10,6 +10,7 @@ export default new Vuetify({
             dark: {
                 colorDarkBg: '#191B1F',
                 colorLightBlue: '#5090ea',
+                colorBlue: '#2172e5',
                 colorDarkBlue: '#172a43',
             }
         },
