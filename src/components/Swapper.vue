@@ -4,7 +4,9 @@
       <span class="swapper__header-title">Swap</span>
       <v-menu bottom :close-on-content-click="false" offset-y offset-x left>
         <template v-slot:activator="{ on, attrs }">
-          <v-icon color="#bbb" v-bind="attrs" v-on="on"> mdi-cog-outline </v-icon>
+          <v-icon color="#bbb" v-bind="attrs" v-on="on">
+            mdi-cog-outline
+          </v-icon>
         </template>
         <TransactionSettings />
       </v-menu>
@@ -22,13 +24,14 @@
         />
         <TokenField
           role="to"
+          ref="tokenfield2"
           :amount.sync="tokenFieldsData[1].amount"
           :token.sync="tokenFieldsData[1].token"
           @tokenChanged="onTokenChanged(1, $event)"
           @amountChanged="onAmountChanged(1, $event)"
         />
       </div>
-      <div class="swapper__tokens-button" @click="tokenFieldsData.reverse()">
+      <div class="swapper__tokens-button" @click="swapTokens">
         <v-icon small>mdi-cached</v-icon>
       </div>
     </v-card-text>
@@ -87,6 +90,7 @@ type TTokenFieldItem = {
 export default class Swapper extends Mixins(MainMixin) {
   $refs!: {
     tokenfield1: TokenField;
+    tokenfield2: TokenField;
   };
 
   tokenFieldsData: TTokenFieldItem[] = [
@@ -180,16 +184,37 @@ export default class Swapper extends Mixins(MainMixin) {
     if (this.tokensChosen && this.quote) {
       const newAmount =
         amount && +amount > 0
-          ? (index === 0 ? +amount * this.quote : +amount / this.quote)
-              .toPrecision(6)
-              .toString()
+          ? (
+              Math.floor(
+                (index === 0 ? +amount * this.quote : +amount / this.quote) *
+                  1000
+              ) / 1000
+            ).toString()
           : null;
       this.tokenFieldsData[1 - index].amount = newAmount;
+      console.log(this.$refs.tokenfield2);
+      console.log(this.$refs.tokenfield2.equivalent);
+      if (
+        this.$refs.tokenfield1.equivalent &&
+        this.$refs.tokenfield2.equivalent
+      ) {
+        const eq1 = +this.$refs.tokenfield2.equivalent;
+        const eq2 = +this.$refs.tokenfield1.equivalent;
+        let delta = Math.floor((eq2 - eq1) * 10000) / 1000000;
+        delta = delta < -100 ? -100 : delta;
+        delta = delta > 100 ? 100 : delta;
+        this.store.main.setDelta(delta);
+      }
     }
   }
 
-  doSwap() {
-    console.log("DO SWAP");
+  swapTokens(): void {
+    this.tokenFieldsData.reverse();
+    if (this.quote) this.quote = 1 / this.quote;
+  }
+
+  doSwap(): void {
+    alert('A REAL swap is available only for tarif "HIRED" ;)');
   }
 
   async mounted(): Promise<void> {

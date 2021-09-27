@@ -44,6 +44,10 @@ const mocks: TMocks = {
       timeout: "random",
       mockData: 32.5,
     },
+    DAI: {
+      timeout: "random",
+      mockData: 2.92,
+    },
     WBTC: {
       timeout: "random",
       mockData: 0.02663,
@@ -64,13 +68,13 @@ const mocks: TMocks = {
       timeout: "random",
       mockData: { quote: 2861.86231 },
     },
+    USDT_ETH: {
+      timeout: "random",
+      mockData: { quote: 0.000349423 },
+    },
     ETH_DAI: {
       timeout: "random",
       mockData: { quote: 2861.82421 },
-    },
-    ETH_BAND: {
-      timeout: "random",
-      mockData: { quote: 393.19973 },
     },
   },
   getUsdQuote: {
@@ -85,6 +89,10 @@ const mocks: TMocks = {
     USDT: {
       timeout: "random",
       mockData: { quote: 1.00103 },
+    },
+    DAI: {
+      timeout: "random",
+      mockData: { quote: 3.00391 },
     },
   },
 };

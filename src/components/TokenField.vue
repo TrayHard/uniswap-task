@@ -39,9 +39,8 @@
         <input
           :value="lAmount"
           type="text"
+          v-mask="'#*.#*'"
           inputmode="decimal"
-          autocomplete="off"
-          autocorrect="off"
           pattern="^[0-9]*[.,]?[0-9]*$"
           placeholder="0.0"
           minlength="1"
@@ -56,9 +55,20 @@
         Balance: {{ currBalance }} {{ this.lToken.symbol }}
       </span>
       <v-spacer />
-      <span class="tokenfield__under-equivalent" v-if="lAmount">{{
-        equivalent
-      }}</span>
+      <span class="tokenfield__under-equivalent" v-if="lAmount && equivalent">
+        {{ equivalent | moneyFormat }}
+        <span
+          v-if="role === 'to'"
+          :class="{
+            'tokenfield__under-equivalent--neutral': delta <= 0 && delta >= -1,
+            'tokenfield__under-equivalent--warning': delta < -1 && delta >= -5,
+            'tokenfield__under-equivalent--negative': delta < -5,
+            'tokenfield__under-equivalent--positive': delta > 0,
+          }"
+        >
+          ({{ delta }}%)
+        </span>
+      </span>
     </div>
   </div>
 </template>
@@ -66,7 +76,6 @@
 <script lang="ts">
 import {
   Component,
-  ModelSync,
   Mixins,
   PropSync,
   Prop,
@@ -74,8 +83,13 @@ import {
 } from "vue-property-decorator";
 import MainMixin from "@/mixins/main";
 import { TToken } from "@/models/main";
+import { moneyFormat } from "@/utils";
+import mask from "@/plugins/directives/mask";
 
-@Component
+@Component({
+  filters: { moneyFormat },
+  directives: { mask },
+})
 export default class TokenField extends Mixins(MainMixin) {
   @PropSync("amount", { type: String, default: null })
   lAmount!: string | null;
@@ -90,15 +104,20 @@ export default class TokenField extends Mixins(MainMixin) {
 
   usdQuote: null | number = null;
 
-  get equivalent(): string {
+  get equivalent(): number | null {
     return this.lAmount && this.usdQuote
-      ? (this.usdQuote * +this.lAmount).toPrecision(7).toString()
-      : "";
+      ? Math.floor(this.usdQuote * +this.lAmount * 100) / 100
+      : null;
   }
 
   get currBalance(): number | null {
     if (this.lToken && this.store.main.balances[this.lToken.symbol])
       return this.store.main.balances[this.lToken.symbol];
+    else return null;
+  }
+
+  get delta(): number | null {
+    if (this.role === "to") return this.store.main.delta;
     else return null;
   }
 
@@ -126,8 +145,26 @@ export default class TokenField extends Mixins(MainMixin) {
       : null;
   }
 
+  @Watch("currBalance")
+  onCurrBalanceChanged(newValue: number | null): void {
+    if (newValue === null && this.lToken) {
+      this.store.main.getBalance(this.lToken.symbol);
+    }
+  }
+
+  // onInputKeyDown(e: KeyboardEvent) {
+  //   if (/[]/.e.key)
+  //   console.log(e)
+  //   // if ()
+  //   //
+  // }
+
   onAmountChanged(e: InputEvent): void {
-    this.$emit("amountChanged", (e.target as HTMLInputElement).value);
+    const value = (e.target as HTMLInputElement).value;
+    this.$emit(
+      "amountChanged",
+      /^[0-9]*[.,]?[0-9]*$/.test(value) ? value : this.lAmount
+    );
   }
 }
 </script>
@@ -176,6 +213,22 @@ export default class TokenField extends Mixins(MainMixin) {
     margin-top: 12px;
 
     &-equivalent {
+      &--neutral {
+        color: #8f96ac;
+      }
+
+      &--warning {
+        color: #e3a507;
+      }
+
+      &--negative {
+        color: #ff4343;
+      }
+
+      &--positive {
+        color: #27ae60;
+      }
+
       &::before {
         content: "~$ ";
       }

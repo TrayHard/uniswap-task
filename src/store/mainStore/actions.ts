@@ -6,10 +6,16 @@ import { MainMutations } from "./mutations";
 export class MainActions extends MainMutations {
   @Action()
   async getBalance(tokenSymbol: string): Promise<number> {
-    return api[EApiEndpoints.getBalance](tokenSymbol).then((amount) => {
-      this.updateBalance({ tokenSymbol, amount });
-      return amount;
-    });
+    return api[EApiEndpoints.getBalance](tokenSymbol)
+      .then((amount) => {
+        this.updateBalance({ tokenSymbol, amount });
+        return amount;
+      })
+      .catch(() => {
+        // bypassing for mocks; in actual wallet we always will get correct value
+        this.updateBalance({ tokenSymbol, amount: 0 });
+        return 0;
+      });
   }
 
   @Action()
