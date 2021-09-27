@@ -12,8 +12,9 @@ export class TokenSelectorActions extends TokenSelectorMutations {
 
   @Action()
   async getAllTokensLists(): Promise<void> {
-    return api[EApiEndpoints.getAllTokensLists]().then((lists) =>
+    return api[EApiEndpoints.getAllTokensLists]().then((lists) => {
+      this.tokensLists = [];
       lists.forEach((list) => this.addTokenList(list))
-    );
+    });
   }
 }

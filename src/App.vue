@@ -26,7 +26,9 @@
           </template>
           <template v-else>
             <div class="nav__main-info pl-3">
-              <v-icon class="nav__main-loader mr-3" v-if="isBalanceLoading">mdi-autorenew</v-icon>
+              <v-icon class="nav__main-loader mr-3" v-if="isBalanceLoading"
+                >mdi-autorenew</v-icon
+              >
               <span class="mr-3" v-else-if="balance">{{ balance }} ETH</span>
               <div class="nav__main-address">
                 <span class="mr-2">{{ shortenWalletAddress }}</span>
@@ -89,22 +91,25 @@ export default class App extends Mixins(MainMixin) {
   }
 
   get balance(): number {
-    return this.store.main.balances.ETH
+    return this.store.main.balances.ETH;
   }
 
   async created(): Promise<void> {
     await this.store.main.login();
-    await this.store.main.getBalance('ETH');
+    await this.store.main.getBalance("ETH");
     this.isBalanceLoading = false;
     this.store.settings.loadSettings();
     this.store.settings.saveSettings();
+    await this.store.tokenSelector.getAllTokensLists();
   }
 }
 </script>
 
 <style lang="scss">
 @keyframes spinner {
-  to {transform: rotate(360deg);}
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .nav {

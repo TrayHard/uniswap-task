@@ -5,6 +5,9 @@ export class MainState {
   balances: Record<string, number> = {};
 
   @State()
+  delta: null | number = null;
+
+  @State()
   address: string | null = null;
 
   @State()

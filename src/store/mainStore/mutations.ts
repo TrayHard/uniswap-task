@@ -13,6 +13,11 @@ export class MainMutations extends MainGetters {
   }
 
   @Mutation()
+  setDelta(value: number): void {
+    this.delta = value;
+  }
+
+  @Mutation()
   updateBalance(payload: { tokenSymbol: string; amount: number }): void {
     this.balances = { ...this.balances, [payload.tokenSymbol]: payload.amount };
   }
