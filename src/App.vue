@@ -96,6 +96,8 @@ export default class App extends Mixins(MainMixin) {
     await this.store.main.login();
     await this.store.main.getBalance('ETH');
     this.isBalanceLoading = false;
+    this.store.settings.loadSettings();
+    this.store.settings.saveSettings();
   }
 }
 </script>

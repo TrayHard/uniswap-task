@@ -21,12 +21,12 @@
         height="32px"
         rounded
         class="mr-2 tx-settings__slippage-autobtn"
-        @click="slippageValue = ''"
+        @click="slippageTolerance = ''"
       >
         Auto
       </v-btn>
       <v-text-field
-        v-model="slippageValue"
+        v-model="slippageTolerance"
         placeholder="0.10"
         outlined
         rounded
@@ -35,6 +35,7 @@
         reverse
         prefix="%"
         class="tx-settings__slippage-input"
+        @change="onSlippageChanged"
       />
     </div>
     <div class="d-flex mt-2">
@@ -54,13 +55,14 @@
     <div class="d-flex mt-2 tx-settings__deadline-body">
       <v-text-field
         class="tx-settings__deadline-input mr-3"
-        v-model="deadlineValue"
+        v-model="transactionDeadline"
         placeholder="30"
         outlined
         rounded
         height="32"
         hide-details
         reverse
+        @change="onDeadlineChanged"
       />
       <span>minutes</span>
     </div>
@@ -80,7 +82,7 @@
           </span>
         </v-tooltip>
       </div>
-      <BToggler v-model="isAutoRouter" type="switcher" />
+      <BToggler v-model="isAutoRouter" type="switcher" @input="onAutoRouterChanged" />
     </div>
     <div class="d-flex mt-2 justify-space-between align-center">
       <div class="d-flex">
@@ -97,21 +99,50 @@
           </span>
         </v-tooltip>
       </div>
-      <BToggler v-model="isExpertMode" type="switcher" />
+      <BToggler v-model="isExpertMode" type="switcher" @input="onExpertModeChanged" />
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Mixins } from "vue-property-decorator";
 import BToggler from "@/components/common/BToggler.vue";
+import MainMixin from "@/mixins/main";
 
 @Component({ components: { BToggler } })
-export default class TransactionSettings extends Vue {
-  isExpertMode = false;
+export default class TransactionSettings extends Mixins(MainMixin) {
+  slippageTolerance = '';
+  transactionDeadline = '';
   isAutoRouter = false;
-  deadlineValue = '';
-  slippageValue = '';
+  isExpertMode = false;
+
+  onExpertModeChanged(value: boolean): void {
+    this.store.settings.setSetting({ name: 'isExpertMode', value });
+    this.store.settings.saveSettings();
+  }
+
+  onAutoRouterChanged(value: boolean): void {
+    this.store.settings.setSetting({ name: 'isAutoRouter', value });
+    this.store.settings.saveSettings();
+  }
+
+  onSlippageChanged(value: string): void {
+    this.store.settings.setSetting({ name: 'slippageTolerance', value });
+    this.store.settings.saveSettings();
+  }
+
+  onDeadlineChanged(value: string): void {
+    this.store.settings.setSetting({ name: 'transactionDeadline', value });
+    this.store.settings.saveSettings();
+  }
+
+  mounted(): void {
+    this.store.settings.loadSettings()
+    this.slippageTolerance = this.store.settings.settings.slippageTolerance;
+    this.transactionDeadline = this.store.settings.settings.transactionDeadline;
+    this.isAutoRouter = this.store.settings.settings.isAutoRouter;
+    this.isExpertMode = this.store.settings.settings.isExpertMode;
+  }
 }
 </script>
 
