@@ -172,14 +172,17 @@ export default class Swapper extends Mixins(MainMixin) {
     await this.store.tokenSelector.getAllTokensLists();
   }
 
-  onTokenChanged(index: number, token: TToken): void {
+  async onTokenChanged(index: number, token: TToken): Promise<void> {
     this.$set(this.tokenFieldsData[index], "token", token);
     this.store.main.getBalance(token.symbol);
     if (!this.tokensChosen) this.quote = null;
-    else this.updateQuote();
+    else {
+      await this.updateQuote();
+      this.onAmountChanged(1 - index, this.tokenFieldsData[1 - index].amount)
+    }
   }
 
-  onAmountChanged(index: number, amount: string): void {
+  onAmountChanged(index: number, amount: string | null): void {
     this.tokenFieldsData[index].amount = amount;
     if (this.tokensChosen && this.quote) {
       const newAmount =
@@ -192,19 +195,21 @@ export default class Swapper extends Mixins(MainMixin) {
             ).toString()
           : null;
       this.tokenFieldsData[1 - index].amount = newAmount;
-      console.log(this.$refs.tokenfield2);
-      console.log(this.$refs.tokenfield2.equivalent);
-      if (
-        this.$refs.tokenfield1.equivalent &&
-        this.$refs.tokenfield2.equivalent
-      ) {
-        const eq1 = +this.$refs.tokenfield2.equivalent;
-        const eq2 = +this.$refs.tokenfield1.equivalent;
-        let delta = Math.floor((eq2 - eq1) * 10000) / 1000000;
-        delta = delta < -100 ? -100 : delta;
-        delta = delta > 100 ? 100 : delta;
-        this.store.main.setDelta(delta);
-      }
+      this.updateDelta()
+    }
+  }
+
+  updateDelta(): void {
+    if (
+      this.$refs.tokenfield1.equivalent &&
+      this.$refs.tokenfield2.equivalent
+    ) {
+      const eq1 = +this.$refs.tokenfield2.equivalent;
+      const eq2 = +this.$refs.tokenfield1.equivalent;
+      let delta = Math.floor((eq2 - eq1) * 10000) / 1000000;
+      delta = delta < -100 ? -100 : delta;
+      delta = delta > 100 ? 100 : delta;
+      this.store.main.setDelta(delta);
     }
   }
 
