@@ -54,7 +54,7 @@ export default class TokenManagerLists extends Mixins(MainMixin) {
 }
 
 .token-lists {
-  border-top: 1px solid $colorModalBorders;
+  border-top: 1px solid $colorGrey1;
   padding: 16px;
 }
 </style>

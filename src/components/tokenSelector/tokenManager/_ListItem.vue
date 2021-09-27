@@ -77,7 +77,7 @@ export default class TokenListItem extends Vue {
   }
 
   &--active {
-    background: #2172e5;
+    background: $colorBlue;
   }
 }
 </style>

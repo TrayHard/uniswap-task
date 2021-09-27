@@ -66,7 +66,7 @@ export default class TokenListsManager extends Vue {
     display: flex;
     justify-content: space-between;
     font-size: 20px !important;
-    border-bottom: 1px solid $colorModalBorders;
+    border-bottom: 1px solid $colorGrey1;
   }
 
   &__body {
@@ -87,7 +87,7 @@ export default class TokenListsManager extends Vue {
   &__toggler {
     display: flex;
     justify-content: space-between;
-    background: #40444f !important;
+    background: $colorGrey2 !important;
     margin-top: 20px;
     border-radius: 12px !important;
     padding: 6px !important;
@@ -102,7 +102,7 @@ export default class TokenListsManager extends Vue {
       -webkit-box-pack: center;
       justify-content: center;
       border-radius: 12px !important;
-      background-color: #40444f !important;
+      background-color: $colorGrey2 !important;
       border: 0 !important;
       color: #ffffff;
       font-size: 16px !important;
