@@ -26,7 +26,7 @@
         </v-btn>
         <v-btn
           v-else
-          color="#2172e5"
+          color="$colorBlue"
           rounded
           class="px-3"
           @click="openTokenSelector"
@@ -142,7 +142,7 @@ export default class TokenField extends Mixins(MainMixin) {
 
   &:hover,
   &:focus {
-    border: 1px solid #40444f;
+    border: 1px solid $colorGrey2;
   }
 
   .v-btn {

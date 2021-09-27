@@ -174,8 +174,8 @@ export default class TokenSelector extends Mixins(MainMixin) {
       opacity: 1 !important;
       font-size: 16px !important;
       background: #2c2f36 !important;
-      border: 1px solid #40444f !important;
-      color: #c3c5cb !important;
+      border: 1px solid $colorGrey2 !important;
+      color: $colorLightGrey1 !important;
       border-radius: 8px !important;
       box-shadow: rgb(0 0 0 / 10%) 0px 4px 8px 0px !important;
       width: 256px !important;
@@ -193,7 +193,7 @@ export default class TokenSelector extends Mixins(MainMixin) {
       font-size: 14px;
       border-radius: 50%;
       background: #2c2f36;
-      color: #c3c5cb;
+      color: $colorLightGrey1;
 
       &:hover {
         opacity: 0.7;
@@ -208,7 +208,7 @@ export default class TokenSelector extends Mixins(MainMixin) {
 
     &-tokenbtn {
       border-radius: 10px !important;
-      border: 1px solid #40444f !important;
+      border: 1px solid $colorGrey2 !important;
       padding: 6px !important;
     }
   }

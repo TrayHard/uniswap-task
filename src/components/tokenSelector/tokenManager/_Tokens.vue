@@ -38,8 +38,8 @@ export default class TokenManagerTokens extends Vue {
   }
 
   &__body {
-    color: #c3c5cb;
-    border-top: 1px solid $colorModalBorders;
+    color: $colorLightGrey1;
+    border-top: 1px solid $colorGrey1;
     padding: 20px;
     flex: 1 1 0;
   }
@@ -50,7 +50,7 @@ export default class TokenManagerTokens extends Vue {
     padding: 20px;
     text-align: center;
     color: #8f96ac;
-    border-top: 1px solid #40444f;
+    border-top: 1px solid $colorGrey2;
   }
 }
 </style>

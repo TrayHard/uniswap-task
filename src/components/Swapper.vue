@@ -2,7 +2,12 @@
   <v-card width="480px" rounded="xl" class="swapper" color="colorDarkBg">
     <v-card-title primary-title class="swapper__header">
       <span class="swapper__header-title">Swap</span>
-      <v-icon color="#bbb"> mdi-cog-outline </v-icon>
+      <v-menu bottom :close-on-content-click="false" offset-y offset-x left>
+        <template v-slot:activator="{ on, attrs }">
+          <v-icon color="#bbb" v-bind="attrs" v-on="on"> mdi-cog-outline </v-icon>
+        </template>
+        <TransactionSettings />
+      </v-menu>
     </v-card-title>
 
     <v-card-text class="swapper__tokens">
@@ -67,8 +72,9 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins, Watch } from "vue-property-decorator";
+import { Component, Mixins } from "vue-property-decorator";
 import TokenField from "@/components/TokenField.vue";
+import TransactionSettings from "@/components/TransactionSettings.vue";
 import { TToken } from "@/models/main";
 import MainMixin from "@/mixins/main";
 
@@ -77,7 +83,7 @@ type TTokenFieldItem = {
   amount: string | null;
 };
 
-@Component({ components: { TokenField } })
+@Component({ components: { TokenField, TransactionSettings } })
 export default class Swapper extends Mixins(MainMixin) {
   $refs!: {
     tokenfield1: TokenField;
@@ -262,13 +268,13 @@ export default class Swapper extends Mixins(MainMixin) {
       background-color: #2c2f36 !important;
       border-radius: 20px !important;
       .v-btn__content {
-        color: #c3c5cb !important;
+        color: $colorLightGrey1 !important;
       }
     }
 
     &-ready.v-btn.v-btn--has-bg {
       font-size: 20px !important;
-      background-color: #2172e5 !important;
+      background-color: $colorBlue !important;
       border-radius: 20px !important;
       .v-btn__content {
         color: #fff !important;
