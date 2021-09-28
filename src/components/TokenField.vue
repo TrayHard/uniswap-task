@@ -136,26 +136,13 @@ export default class TokenField extends Mixins(MainMixin) {
   }
 
   openTokenSelector(): void {
-    // if (this.lToken) {
-    //   let token = this.store.tokenSelector.basicTokensList.find((token) => {
-    //     if (this.lToken) return token?.symbol === this.lToken.symbol;
-    //   });
-    //   if (!token && this.store.tokenSelector.fullTokensList.length) {
-    //     token = this.store.tokenSelector.fullTokensList.find((token) => {
-    //       if (this.lToken) return token?.symbol === this.lToken.symbol;
-    //     });
-    //   }
-    //   console.log({ openTokenSelectorToken: token });
-    // }
     const token = this.lToken ? this.lToken : null;
-    console.log("openTokenSelector", token);
     this.store.tokenSelector.setTokenChosen(token);
     this.store.tokenSelector.setIsModalOpen(true);
     this.watcherHandler = this.$watch(
       "store.tokenSelector.tokenChosen",
       (token: TToken | null) => {
         this.watcherHandler();
-        console.log({ onTokenChosen: token });
         this.$emit("tokenChanged", token);
         this.store.tokenSelector.setTokenChosen(null);
         this.store.tokenSelector.setIsModalOpen(false);
