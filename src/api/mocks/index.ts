@@ -40,9 +40,17 @@ const mocks: TMocks = {
       timeout: "random",
       mockData: 0.192992,
     },
+    WETH: {
+      timeout: "random",
+      mockData: 0.863549,
+    },
     USDT: {
       timeout: "random",
       mockData: 32.5,
+    },
+    USDC: {
+      timeout: "random",
+      mockData: 0,
     },
     DAI: {
       timeout: "random",
@@ -64,6 +72,10 @@ const mocks: TMocks = {
       timeout: "random",
       mockData: { quote: 0.06852122 },
     },
+    WBTC_ETH: {
+      timeout: "random",
+      mockData: { quote: 14.594019 },
+    },
     ETH_USDT: {
       timeout: "random",
       mockData: { quote: 2861.86231 },
@@ -76,9 +88,33 @@ const mocks: TMocks = {
       timeout: "random",
       mockData: { quote: 2861.82421 },
     },
+    DAI_ETH: {
+      timeout: "random",
+      mockData: { quote: 0.000349561 },
+    },
+    ETH_USDC: {
+      timeout: "random",
+      mockData: { quote: 2861.45898 },
+    },
+    USDC_ETH: {
+      timeout: "random",
+      mockData: { quote: 0.000349843 },
+    },
+    ETH_WETH: {
+      timeout: "random",
+      mockData: { quote: 1 },
+    },
+    WETH_ETH: {
+      timeout: "random",
+      mockData: { quote: 1 },
+    },
   },
   getUsdQuote: {
     ETH: {
+      timeout: "random",
+      mockData: { quote: 2861.86 },
+    },
+    WETH: {
       timeout: "random",
       mockData: { quote: 2861.86 },
     },
@@ -90,9 +126,13 @@ const mocks: TMocks = {
       timeout: "random",
       mockData: { quote: 1.00103 },
     },
+    USDC: {
+      timeout: "random",
+      mockData: { quote: 1.00093 },
+    },
     DAI: {
       timeout: "random",
-      mockData: { quote: 3.00391 },
+      mockData: { quote: 1.00391 },
     },
   },
 };
