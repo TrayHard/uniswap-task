@@ -99,6 +99,8 @@ export default class TokenField extends Mixins(MainMixin) {
 
   usdQuote: null | number = null;
 
+  watcherHandler(): void {}
+
   get equivalent(): number | null {
     return this.lAmount && this.usdQuote
       ? Math.floor(this.usdQuote * +this.lAmount * 100) / 100
@@ -134,14 +136,29 @@ export default class TokenField extends Mixins(MainMixin) {
   }
 
   openTokenSelector(): void {
+    // if (this.lToken) {
+    //   let token = this.store.tokenSelector.basicTokensList.find((token) => {
+    //     if (this.lToken) return token?.symbol === this.lToken.symbol;
+    //   });
+    //   if (!token && this.store.tokenSelector.fullTokensList.length) {
+    //     token = this.store.tokenSelector.fullTokensList.find((token) => {
+    //       if (this.lToken) return token?.symbol === this.lToken.symbol;
+    //     });
+    //   }
+    //   console.log({ openTokenSelectorToken: token });
+    // }
+    const token = this.lToken ? this.lToken : null;
+    console.log("openTokenSelector", token);
+    this.store.tokenSelector.setTokenChosen(token);
     this.store.tokenSelector.setIsModalOpen(true);
-    const unwatch = this.$watch(
+    this.watcherHandler = this.$watch(
       "store.tokenSelector.tokenChosen",
-      (token: TToken) => {
-        this.store.tokenSelector.setIsModalOpen(false);
+      (token: TToken | null) => {
+        this.watcherHandler();
+        console.log({ onTokenChosen: token });
         this.$emit("tokenChanged", token);
         this.store.tokenSelector.setTokenChosen(null);
-        unwatch();
+        this.store.tokenSelector.setIsModalOpen(false);
       }
     );
   }
@@ -166,6 +183,14 @@ export default class TokenField extends Mixins(MainMixin) {
   onCurrBalanceChanged(newValue: number | null): void {
     if (newValue === null && this.lToken) {
       this.store.main.getBalance(this.lToken.symbol);
+    }
+  }
+
+  @Watch("store.tokenSelector.isModalOpen")
+  onModalOpenChanged(isOpen: boolean): void {
+    if (!isOpen) {
+      this.store.tokenSelector.setTokenChosen(null);
+      this.watcherHandler();
     }
   }
 }

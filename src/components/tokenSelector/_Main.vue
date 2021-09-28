@@ -28,8 +28,7 @@
           </v-tooltip>
         </div>
         <v-btn-toggle
-          mandatory
-          v-model="tokenChosen"
+          v-model="basicTokenChosen"
           class="ts-main-window__common-content d-flex"
         >
           <v-btn
@@ -37,7 +36,7 @@
             v-for="token in basicTokens"
             :key="token.symbol"
             outlined
-            @click="setTokenChosen(token)"
+            :value="token"
           >
             <v-avatar size="24px" class="mr-2">
               <img :src="token.logoURI" width="24px" />
@@ -99,7 +98,12 @@ import { ETokenSelectorComponents } from "./TokenSelector.vue";
 @Component
 export default class TokenSelectorMainWindow extends Mixins(MainMixin) {
   tokenName = "";
-  tokenChosen = "";
+
+  basicTokenChosen: TToken | null = null;
+
+  tokenChosen: TToken | null = null;
+
+  watcherHandler(): void {}
 
   get isOpen(): boolean {
     return this.store.tokenSelector.isModalOpen;
@@ -129,13 +133,39 @@ export default class TokenSelectorMainWindow extends Mixins(MainMixin) {
     this.isOpen = false;
   }
 
-  @Watch("store.tokenSelector.tokenChosen")
-  onTokenChosen(): void {
-    this.closeModal();
-  }
+  // @Watch("tokenChosen")
+  // onTokenChosenChanged(newValue: TToken | null): void {
+  //   console.log({ tokenChosen: this.tokenChosen });
+  // }
 
   onManageTokenListsClick(): void {
     this.$emit("changed", ETokenSelectorComponents.tokenManager);
+  }
+
+  loadTokenChosen(): void {
+    this.basicTokenChosen = this.store.tokenSelector.tokenChosen;
+  }
+
+  @Watch("store.tokenSelector.isModalOpen", { immediate: true })
+  onModalOpenChanged(isOpen: boolean): void {
+    console.log({ isModalOpen: isOpen });
+    if (isOpen) {
+      this.loadTokenChosen();
+      this.watcherHandler = this.$watch(
+        "basicTokenChosen",
+        (token: TToken | null) => {
+          console.log("tokenChosen changed", token);
+          this.watcherHandler();
+          if (token) this.setTokenChosen(token);
+        }
+      );
+    } else {
+      this.watcherHandler();
+    }
+  }
+
+  mounted(): void {
+    this.loadTokenChosen();
   }
 }
 </script>
