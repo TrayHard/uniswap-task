@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Mixins } from "vue-property-decorator";
+import { Component, Mixins, Watch } from "vue-property-decorator";
 import MainMixin from "@/mixins/main";
 import MainWindow from "./_Main.vue";
 import TokensManager from "./tokenManager/TokenManager.vue";
@@ -38,6 +38,11 @@ export default class TokenSelector extends Mixins(MainMixin) {
 
   updateComponent(componentName: ETokenSelectorComponents): void {
     this.componentName = componentName;
+  }
+
+  @Watch('store.tokenSelector.isModalOpen')
+  onModalOpenChange(value: boolean): void {
+    if (value) this.componentName = ETokenSelectorComponents.mainWindow;
   }
 }
 </script>
