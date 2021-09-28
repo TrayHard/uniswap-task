@@ -1,5 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500&display=swap');
-$body-font-family: 'Inter';
+@font-face {
+  font-family: "Inter custom";
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: block;
+  font-named-instance: Regular;
+  src: url("~@/assets/fonts/Inter-roman.var.woff2") format("woff2 supports variations(gvar)"),
+    url("~@/assets/fonts/Inter-roman.var.woff2") format("woff2-variations"),
+    url("~@/assets/fonts/Inter-roman.var.woff2") format("woff2");
+}
+
+@supports (font-variation-settings: normal) {
+  * {
+    font-family: "Inter custom", sans-serif;
+  }
+}
+
+html {
+  font-size: 16px;
+  font-variant: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+  font-feature-settings: "ss01" on, "ss02" on, "cv01" on, "cv03" on;
+}
+
+$body-font-family: "Inter custom";
 
 $btn-text-transform: none;
 
