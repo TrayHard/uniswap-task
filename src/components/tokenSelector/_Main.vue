@@ -108,7 +108,12 @@ export default class TokenSelectorMainWindow extends Mixins(MainMixin) {
   }
 
   get fullTokensList(): TToken[] {
-    return this.store.tokenSelector.fullTokensList;
+    return this.store.tokenSelector.fullTokensList.filter((list) => {
+      return (
+        list.symbol.toLowerCase().includes(this.tokenName.toLowerCase()) ||
+        list.name.toLowerCase().includes(this.tokenName.toLowerCase())
+      );
+    });
   }
 
   setTokenChosen(token: TToken): void {
