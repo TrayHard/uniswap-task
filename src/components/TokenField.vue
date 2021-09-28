@@ -1,7 +1,7 @@
 <template>
   <div class="tokenfield">
     <div class="tokenfield__main">
-      <div class="tokenfield__token-choose">
+      <div class="tokenfield__token-choose mr-3">
         <v-btn
           v-if="isLoading"
           rounded
@@ -150,6 +150,11 @@ export default class TokenField extends Mixins(MainMixin) {
     this.isLoading = value;
   }
 
+  onAmountChanged(e: InputEvent): void {
+    const value = (e.target as HTMLInputElement).value;
+    this.$emit("amountChanged", value);
+  }
+
   @Watch("lToken")
   async onTokenChanged(newToken: TToken | null): Promise<void> {
     this.usdQuote = newToken
@@ -162,11 +167,6 @@ export default class TokenField extends Mixins(MainMixin) {
     if (newValue === null && this.lToken) {
       this.store.main.getBalance(this.lToken.symbol);
     }
-  }
-
-  onAmountChanged(e: InputEvent): void {
-    const value = (e.target as HTMLInputElement).value;
-    this.$emit("amountChanged", value);
   }
 }
 </script>

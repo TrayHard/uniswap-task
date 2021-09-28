@@ -86,7 +86,9 @@ export default class BToggler extends Vue {
       font-weight: 400;
       height: 100%;
 
-      &--active { background: #1966d4; }
+      &--active {
+        background: #1966d4;
+      }
     }
 
     &-label-off {
@@ -98,7 +100,9 @@ export default class BToggler extends Vue {
       font-weight: 400;
       height: 100%;
 
-      &--active { background: #565a69; }
+      &--active {
+        background: #565a69;
+      }
     }
   }
 

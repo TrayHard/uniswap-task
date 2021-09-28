@@ -107,7 +107,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Mixins } from "vue-property-decorator";
+import { Component, Mixins } from "vue-property-decorator";
 import BToggler from "@/components/common/BToggler.vue";
 import MainMixin from "@/mixins/main";
 import mask from "@/plugins/directives/mask";
