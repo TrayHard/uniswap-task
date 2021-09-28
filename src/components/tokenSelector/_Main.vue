@@ -97,7 +97,7 @@ import MainMixin from "@/mixins/main";
 import { ETokenSelectorComponents } from "./TokenSelector.vue";
 
 @Component
-export default class TokenSelector extends Mixins(MainMixin) {
+export default class TokenSelectorMainWindow extends Mixins(MainMixin) {
   tokenName = "";
   tokenChosen = "";
 
@@ -147,10 +147,6 @@ export default class TokenSelector extends Mixins(MainMixin) {
   flex-flow: column;
   height: 100%;
   width: 100%;
-  // top: 0;
-  // left: 0;
-  // min-height: 100%;
-  // grid-template-rows: 60px 225px auto 60px;
 
   &__title {
     display: flex;
@@ -224,7 +220,6 @@ export default class TokenSelector extends Mixins(MainMixin) {
 
       &__subtitle {
         font-size: 12px !important;
-        // TODO: Fix font weight
       }
     }
   }

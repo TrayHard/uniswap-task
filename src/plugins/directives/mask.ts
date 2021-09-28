@@ -1,6 +1,4 @@
-import Vue from "vue";
 import { DirectiveBinding } from "vue/types/options";
-import { DirectiveFunction } from "vue/types/umd";
 
 export type TokenType = {
   [key: string]: {
@@ -103,18 +101,6 @@ function toggleMask(el: HTMLElement, binding: DirectiveBinding) {
     }
   }
 }
-
-Vue.directive("mask", {
-  bind(el, binding) {
-    toggleMask(el, binding);
-  },
-  unbind(el) {
-    const input = getInputElement(el);
-    if (input) {
-      input.removeEventListener("input", handleValueChange);
-    }
-  },
-});
 
 const mask = {
   bind: (el: HTMLElement, binding: DirectiveBinding): void =>

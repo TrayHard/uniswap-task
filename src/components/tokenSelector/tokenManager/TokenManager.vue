@@ -40,7 +40,7 @@ export default class TokenListsManager extends Vue {
     const mapper: Record<ETokenManagerComponents, unknown> = {
       lists: Lists,
       tokens: Tokens,
-    }
+    };
     return mapper[this.componentName];
   }
 

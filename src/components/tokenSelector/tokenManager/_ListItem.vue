@@ -3,30 +3,26 @@
     class="token-list-item"
     :class="{ 'token-list-item--active': localIsActive }"
   >
-
-    <v-avatar
-      class="token-list-item__logo"
-      size="40px"
-      color="grey"
-    >
-      <img v-if="listLogo" :src="listLogo">
+    <v-avatar class="token-list-item__logo" size="40px" color="grey">
+      <img v-if="listLogo" :src="listLogo" />
     </v-avatar>
 
     <div class="token-list-item__name">
       <p class="token-list-item__name-title">{{ listName }}</p>
-      <p class="token-list-item__name-subtitle">{{ tokensCount }} tokens <v-icon x-small>mdi-cog</v-icon></p>
+      <p class="token-list-item__name-subtitle">
+        {{ tokensCount }} tokens <v-icon x-small>mdi-cog</v-icon>
+      </p>
     </div>
 
     <b-toggler v-model="localIsActive" />
-
   </div>
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop, Watch } from 'vue-property-decorator';
-import BToggler from '@/components/common/BToggler.vue';
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
+import BToggler from "@/components/common/BToggler.vue";
 
-@Component({ components: { BToggler }})
+@Component({ components: { BToggler } })
 export default class TokenListItem extends Vue {
   @Prop(String)
   listName!: string;
@@ -40,15 +36,15 @@ export default class TokenListItem extends Vue {
   @Prop({ type: Boolean, required: true })
   active!: boolean;
 
-  localIsActive = false
+  localIsActive = false;
 
-  @Watch('localIsActive')
+  @Watch("localIsActive")
   onIsActiveChange(newValue: boolean): void {
-    this.$emit('change', newValue);
+    this.$emit("change", newValue);
   }
 
   created(): void {
-    this.localIsActive = this.active
+    this.localIsActive = this.active;
   }
 }
 </script>
@@ -72,8 +68,12 @@ export default class TokenListItem extends Vue {
     justify-content: center;
     flex: 1 1 0;
 
-    &-title { font-size: 16px; }
-    &-subtitle { font-size: 12px; }
+    &-title {
+      font-size: 16px;
+    }
+    &-subtitle {
+      font-size: 12px;
+    }
   }
 
   &--active {

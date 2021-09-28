@@ -34,7 +34,7 @@ import ListItem from "./_ListItem.vue";
 
 @Component({ components: { ListItem } })
 export default class TokenManagerLists extends Mixins(MainMixin) {
-  searchText = ''
+  searchText = "";
 
   get tokenLists(): TTokenList[] {
     return this.store.tokenSelector.sortedTokensLists;

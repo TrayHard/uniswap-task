@@ -143,21 +143,6 @@ export default class Swapper extends Mixins(MainMixin) {
     } else return "";
   }
 
-  async updateBalance(): Promise<void> {
-    if (this.tokenFieldsData[0].token)
-      await this.store.main.getBalance(this.tokenFieldsData[0].token.symbol);
-  }
-
-  async updateQuote(): Promise<void> {
-    if (this.tokenFieldsData[0].token && this.tokenFieldsData[1].token)
-      this.quote = (
-        await this.store.main.getQuote({
-          from: this.tokenFieldsData[0].token?.symbol,
-          to: this.tokenFieldsData[1].token?.symbol,
-        })
-      ).quote;
-  }
-
   get hintText(): string {
     if (!this.tokenFieldsData[0].amount) return "Enter an amount";
     else if (!this.tokenFieldsData[0].token || !this.tokenFieldsData[1].token)
@@ -168,17 +153,32 @@ export default class Swapper extends Mixins(MainMixin) {
     else return "";
   }
 
+  async updateBalance(): Promise<void> {
+    if (this.tokenFieldsData[0].token)
+      await this.store.main.getBalance(this.tokenFieldsData[0].token.symbol);
+  }
+
+  async updateQuote(): Promise<void> {
+    if (this.tokenFieldsData[0].token && this.tokenFieldsData[1].token)
+      this.quote = (
+        await this.store.main.getQuote({
+          from: this.tokenFieldsData[0].token.symbol,
+          to: this.tokenFieldsData[1].token.symbol,
+        })
+      ).quote;
+  }
+
   async loadTokensLists(): Promise<void> {
     await this.store.tokenSelector.getAllTokensLists();
   }
 
-  async onTokenChanged(index: number, token: TToken): Promise<void> {
+  async onTokenChanged(index: number, token: TToken | null): Promise<void> {
     this.$set(this.tokenFieldsData[index], "token", token);
-    this.store.main.getBalance(token.symbol);
+    if (token) this.store.main.getBalance(token.symbol);
     if (!this.tokensChosen) this.quote = null;
     else {
       await this.updateQuote();
-      this.onAmountChanged(1 - index, this.tokenFieldsData[1 - index].amount)
+      this.onAmountChanged(1 - index, this.tokenFieldsData[1 - index].amount);
     }
   }
 
@@ -195,7 +195,7 @@ export default class Swapper extends Mixins(MainMixin) {
             ).toString()
           : null;
       this.tokenFieldsData[1 - index].amount = newAmount;
-      this.updateDelta()
+      this.updateDelta();
     }
   }
 
@@ -219,7 +219,7 @@ export default class Swapper extends Mixins(MainMixin) {
   }
 
   doSwap(): void {
-    alert('A REAL swap is available only for tarif "HIRED" ;)');
+    alert('An actual swappping is available only for tarif "Hired" ;)');
   }
 
   async mounted(): Promise<void> {

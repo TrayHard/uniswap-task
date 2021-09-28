@@ -15,8 +15,9 @@
             value="Charts↗"
             href="https://info.uniswap.org/#/"
             target="_blank"
-            >Charts <sup>↗</sup></v-btn
           >
+            Charts <sup>↗</sup>
+          </v-btn>
         </v-btn-toggle>
         <div class="nav__main">
           <template v-if="!isConnected">
@@ -26,9 +27,9 @@
           </template>
           <template v-else>
             <div class="nav__main-info pl-3">
-              <v-icon class="nav__main-loader mr-3" v-if="isBalanceLoading"
-                >mdi-autorenew</v-icon
-              >
+              <v-icon class="nav__main-loader mr-3" v-if="isBalanceLoading">
+                mdi-autorenew
+              </v-icon>
               <span class="mr-3" v-else-if="balance">{{ balance }} ETH</span>
               <div class="nav__main-address">
                 <span class="mr-2">{{ shortenWalletAddress }}</span>
