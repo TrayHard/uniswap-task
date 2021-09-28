@@ -37,6 +37,7 @@
             :key="token.symbol"
             outlined
             :value="token"
+            @click="setTokenChosen(token)"
           >
             <v-avatar size="24px" class="mr-2">
               <img :src="token.logoURI" width="24px" />
@@ -64,7 +65,6 @@
             >
               <img :src="token.logoURI" />
             </v-list-item-avatar>
-
             <v-list-item-content>
               <v-list-item-title>
                 {{ token.symbol }}
@@ -103,16 +103,6 @@ export default class TokenSelectorMainWindow extends Mixins(MainMixin) {
 
   tokenChosen: TToken | null = null;
 
-  watcherHandler(): void {}
-
-  get isOpen(): boolean {
-    return this.store.tokenSelector.isModalOpen;
-  }
-
-  set isOpen(value: boolean) {
-    this.store.tokenSelector.setIsModalOpen(value);
-  }
-
   get basicTokens(): TToken[] {
     return this.store.tokenSelector.basicTokensList;
   }
@@ -121,22 +111,13 @@ export default class TokenSelectorMainWindow extends Mixins(MainMixin) {
     return this.store.tokenSelector.fullTokensList;
   }
 
-  getTokensList(name: string): void {
-    this.store.tokenSelector.getTokensList(name);
-  }
-
   setTokenChosen(token: TToken): void {
     this.store.tokenSelector.setTokenChosen(token);
   }
 
   closeModal(): void {
-    this.isOpen = false;
+    this.store.tokenSelector.setIsModalOpen(false);
   }
-
-  // @Watch("tokenChosen")
-  // onTokenChosenChanged(newValue: TToken | null): void {
-  //   console.log({ tokenChosen: this.tokenChosen });
-  // }
 
   onManageTokenListsClick(): void {
     this.$emit("changed", ETokenSelectorComponents.tokenManager);
@@ -144,24 +125,12 @@ export default class TokenSelectorMainWindow extends Mixins(MainMixin) {
 
   loadTokenChosen(): void {
     this.basicTokenChosen = this.store.tokenSelector.tokenChosen;
+    this.tokenChosen = this.store.tokenSelector.tokenChosen;
   }
 
   @Watch("store.tokenSelector.isModalOpen", { immediate: true })
   onModalOpenChanged(isOpen: boolean): void {
-    console.log({ isModalOpen: isOpen });
-    if (isOpen) {
-      this.loadTokenChosen();
-      this.watcherHandler = this.$watch(
-        "basicTokenChosen",
-        (token: TToken | null) => {
-          console.log("tokenChosen changed", token);
-          this.watcherHandler();
-          if (token) this.setTokenChosen(token);
-        }
-      );
-    } else {
-      this.watcherHandler();
-    }
+    if (isOpen) this.loadTokenChosen();
   }
 
   mounted(): void {
